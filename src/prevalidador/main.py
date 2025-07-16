@@ -1,13 +1,11 @@
-# src/prevalidador/main.py
-
 """
 Script principal para ejecutar el prevalidador en masa:
   1. Recorre todos los archivos Excel (.xlsx) en la carpeta de entrada (inbox).
   2. Para cada archivo:
-     a. Ejecuta las validaciones definidas en JSON.
-     b. Genera un nuevo archivo con sufijo '_validacion' en la carpeta Resultados.
-     c. Agrega columna 'Errores' en cada hoja y hoja 'Resumen'.
-     d. Mueve el archivo original a la carpeta Histórico.
+      a. Ejecuta las validaciones definidas en JSON.
+      b. Genera un nuevo archivo con sufijo '_validacion' en la carpeta Resultados.
+      c. Agrega columna 'Errores' en cada hoja y hoja 'Resumen'.
+      d. Mueve el archivo original a la carpeta Histórico.
 """
 
 import argparse
@@ -17,10 +15,10 @@ import shutil
 from pathlib import Path
 
 import pandas as pd
-from openpyxl import utils
+from openpyxl import utils # Importado pero no usado en el snippet, se mantiene por si es usado en otras partes del código original.
 
 from prevalidador._internals.rules_engine import ejecutar_validaciones
-from prevalidador.errors import ValidationError
+from prevalidador.errors import ValidationError # Importado pero no usado en el snippet, se mantiene por si es usado en otras partes del código original.
 
 # Silenciar warnings de validación de datos de openpyxl
 warnings.filterwarnings(
@@ -29,19 +27,42 @@ warnings.filterwarnings(
 )
 
 # Configuración de logging
-typing = logging.basicConfig(
+# Nota: La variable 'typing' no es necesaria aquí; basicConfig ya configura el logger raíz.
+logging.basicConfig(
     format="%(asctime)s %(levelname)s: %(message)s",
     level=logging.INFO
 )
 
 
-def main(
-    inbox_dir: Path,
-    rules_path: Path,
-    catalogs_path: Path,
-    historico_dir: Path,
-    resultados_dir: Path
-):
+def main():
+    """
+    Función principal para la prevalidación de cargas masivas.
+    Parsea los argumentos de línea de comandos y ejecuta el proceso de validación.
+    """
+    parser = argparse.ArgumentParser(
+        description="Prevalidador masivo de Excel con histórico y resultados"
+    )
+    parser.add_argument('inbox_dir',      type=Path, help='Carpeta con archivos a validar (Archivos)')
+    parser.add_argument('rules_json',     type=Path, help='JSON de reglas')
+    parser.add_argument('catalogs_path',  type=Path, help='Catálogos (.xlsx/.csv)')
+    parser.add_argument('historico_dir',  type=Path, help='Carpeta para archivos procesados (Historico)')
+    parser.add_argument('resultados_dir', type=Path, help='Carpeta para archivos de salida (Resultados)')
+    args = parser.parse_args()
+
+    # Asignar los argumentos parseados a variables locales para mayor claridad
+    inbox_dir = args.inbox_dir
+    rules_path = args.rules_json # Renombrado para coincidir con el uso interno de la función
+    catalogs_path = args.catalogs_path
+    historico_dir = args.historico_dir
+    resultados_dir = args.resultados_dir
+
+    logging.info(f"Ejecutando validaciones con los siguientes parámetros:")
+    logging.info(f"  Directorio de entrada (Inbox): {inbox_dir}")
+    logging.info(f"  Ruta de reglas: {rules_path}")
+    logging.info(f"  Ruta de catálogos: {catalogs_path}")
+    logging.info(f"  Directorio histórico: {historico_dir}")
+    logging.info(f"  Directorio de resultados: {resultados_dir}")
+
     # Validar carpetas
     for folder in (inbox_dir, historico_dir, resultados_dir):
         if not folder.exists():
@@ -65,6 +86,7 @@ def main(
         output_file = resultados_dir / f"{input_file.stem}_validacion{input_file.suffix}"
 
         # Ejecutar validaciones
+        # Asegúrate de que ejecutar_validaciones acepte rutas como strings si es necesario
         errores = ejecutar_validaciones(
             file_path=str(input_file),
             path_rules=str(rules_path),
@@ -134,20 +156,8 @@ def main(
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-        description="Prevalidador masivo de Excel con histórico y resultados"
-    )
-    parser.add_argument('inbox_dir',     type=Path, help='Carpeta con archivos a validar (Archivos)')
-    parser.add_argument('rules_json',    type=Path, help='JSON de reglas')
-    parser.add_argument('catalogs_path', type=Path, help='Catálogos (.xlsx/.csv)')
-    parser.add_argument('historico_dir', type=Path, help='Carpeta para archivos procesados (Historico)')
-    parser.add_argument('resultados_dir', type=Path, help='Carpeta para archivos de salida (Resultados)')
-    args = parser.parse_args()
-
-    main(
-        args.inbox_dir,
-        args.rules_json,
-        args.catalogs_path,
-        args.historico_dir,
-        args.resultados_dir
-    )
+    # Este bloque solo se ejecuta si el script se corre directamente (e.g., python main.py)
+    # y no es estrictamente necesario para el entry point de setuptools,
+    # ya que la función main() ahora maneja el parsing de argumentos.
+    # Sin embargo, se puede mantener para pruebas directas del script.
+    main()
