@@ -19,13 +19,19 @@ dependencies = [
 "Homepage" = "https://github.com/tu_usuario/prevalidador"
 "Repository" = "https://github.com/tu_usuario/prevalidador"
 
+# ¡NUEVA SECCIÓN! Aquí es donde deben ir los scripts de consola
+[project.scripts]
+prevalidar = "prevalidador.main:main"
+
 [tool.setuptools]
 packages = { find = { where = ["src"] } }
 
 [tool.setuptools.package-data]
 "prevalidador" = ["config/**/*.json", "config/**/*.xlsx", "config/**/*.csv"]
 
-[tool.setuptools.entry-points]
-console_scripts = [
-  "prevalidar=prevalidador.main:main"
-]
+# Esta sección [tool.setuptools.entry-points] DEBE SER ELIMINADA
+# ya que su contenido se movió a [project.scripts]
+# [tool.setuptools.entry-points]
+# console_scripts = [
+#   "prevalidar=prevalidador.main:main"
+# ]
