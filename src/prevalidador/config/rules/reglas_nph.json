@@ -857,7 +857,84 @@
     "ConservacionCocina",
     "ComplementoIndustrial",
     "Altura"
-  ]
+  ],
+
+  "Secuencia": {
+    "vacia": true,
+    "mensaje_error": "El campo secuencia debe de estar vacia"
+  },
+  "Armazon": {
+    "vacia": true,
+    "mensaje_error": "El campo armazon debe de estar vacia"
+  },
+  "Muro": {
+    "vacia": true,
+    "mensaje_error": "El campo muro debe de estar vacia"
+  },
+  "Cubierta": {
+    "vacia": true,
+    "mensaje_error": "El campo cubierta debe de estar vacia"
+  },
+  "Conservacion": {
+    "vacia": true,
+    "mensaje_error": "El campo conservacion debe de estar vacia"
+  },
+  "Fachada": {
+    "vacia": true,
+    "mensaje_error": "El campo fachada debe de estar vacia"
+  },
+  "Cubrimiento Muro": {
+    "vacia": true,
+    "mensaje_error": "El campo cubrimiento muro debe de estar vacia"
+  },
+  "Piso": {
+    "vacia": true,
+    "mensaje_error": "El campo piso debe de estar vacia"
+  },
+  "ConservacionPrincipales": {
+    "vacia": true,
+    "mensaje_error": "El campo conservacion principales debe de estar vacia"
+  },
+  "TamanioBanio": {
+    "vacia": true,
+    "mensaje_error": "El campo tamanio banio debe de estar vacia"
+  },
+  "EnchapesBanio": {
+    "vacia": true,
+    "mensaje_error": "El campo enchapes banio debe de estar vacia"
+  },
+  "MobiliarioBanio": {
+    "vacia": true,
+    "mensaje_error": "El campo mobiliario banio debe de estar vacia"
+  },
+  "ConservacionBanio": {
+    "vacia": true,
+    "mensaje_error": "El campo conservacion banio debe de estar vacia"
+  },
+  "TamanioCocina": {
+    "vacia": true,
+    "mensaje_error": "El campo tamanio cocina debe de estar vacia"
+  },
+  "Enchape": {
+    "vacia": true,
+    "mensaje_error": "El campo enchape debe de estar vacia"
+  },
+  "MobiliarioCocina": {
+    "vacia": true,
+    "mensaje_error": "El campo mobiliario cocina debe de estar vacia"
+  },
+  "ConservacionCocina": {
+    "vacia": true,
+    "mensaje_error": "El campo conservacion cocina debe de estar vacia"
+  },
+  "ComplementoIndustrial": {
+    "vacia": true,
+    "mensaje_error": "El campo complemento industrial debe de estar vacia"
+  },
+  "Altura": {
+    "vacia": true,
+    "mensaje_error": "El campo altura debe de estar vacia"
+  }
 
 },
 "ConstruccionesGenerales":{
