@@ -250,7 +250,7 @@ def validate_ref_sheet(_value, _row, _idx, rule: Rule, loaders=None, dfs=None, d
     validos = df_other[col_other].astype(str).tolist()
 
     # Recorremos cada fila de df principal
-    for idx, val in df[rule.columna].astype(str).fillna("").iteritems():
+    for idx, val in df[rule.columna].astype(str).fillna("").items():
         if val not in validos:
             # idx es el índice de pandas (0-based), +2 => fila de Excel
             errors.append(ValidationError(
