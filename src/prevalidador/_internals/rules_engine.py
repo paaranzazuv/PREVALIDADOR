@@ -226,7 +226,7 @@ def ejecutar_validaciones(
                     new_errs = validator(val, row, idx, rule, loaders=loader, dfs=dfs, df=df)
                     for e in new_errs:
                         if e.row is None:
-                            e.row = idx + 1
+                            e.row = idx 
                     errs.extend(new_errs)
             errors.extend(errs)
 

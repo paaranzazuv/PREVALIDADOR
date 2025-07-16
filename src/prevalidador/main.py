@@ -115,7 +115,7 @@ def main():
                     records = []
                     for err in errores_por_hoja.get(hoja, []):
                         if err.row is not None:
-                            idx = err.row - 2  # 1-header + cero-based
+                            idx = err.row   # 1-header + cero-based
                             if 0 <= idx < len(df_out):
                                 records.append({'idx': idx, 'msg': err.message})
                     if records:
