@@ -145,24 +145,65 @@ def infer_validator_and_params(raw_rule: dict) -> Tuple[str, dict]:
 def load_rules(path_rules: str) -> List[Rule]:
     """
     Lee JSON de reglas y construye lista de Rule.
+    Ignora claves especiales (_estructura, __max_filas, __min_filas)
+    y reglas realmente globales que se procesan en validar_globales_por_hoja.
     """
     with open(path_rules, encoding="utf-8") as f:
         raw = json.load(f)
 
     rules: List[Rule] = []
+
     for sheet, definitions in raw.items():
-        # Estructura
+        # ✅ Validación de estructura esperada de columnas
         cols = definitions.get("_estructura")
         if cols:
-            rules.append(Rule(sheet=sheet, columna="_estructura", validator="estructura", params={}, valor=cols))
-        # Otras reglas
+            rules.append(
+                Rule(
+                    sheet=sheet,
+                    columna="_estructura",
+                    validator="estructura",
+                    params={},
+                    valor=cols
+                )
+            )
+
+        # ✅ Reglas por columna
         for col, raw_rules in definitions.items():
-            if col == "_estructura":
+            if col in ("_estructura", "__max_filas", "__min_filas"):
                 continue
+
             rr_list = raw_rules if isinstance(raw_rules, list) else [raw_rules]
             for rr in rr_list:
+                if not isinstance(rr, dict):
+                    raise ValueError(f"[ERROR] En hoja {sheet}, columna {col} la regla no es un dict válido: {rr}")
+
+                # ⛔ Ignorar reglas globales: agrupado_por + valores_requeridos
+                if "agrupado_por" in rr and "valores_requeridos" in rr:
+                    continue
+
+                # ⛔ Ignorar suma_igual_a global (no agrupada)
+                if "suma_igual_a" in rr and "agrupado_por" not in rr:
+                    continue
+
+                # ✅ Regla de suma agrupada
+                if "agrupado_por" in rr and "suma_igual_a" in rr:
+                    val_name, params = infer_validator_and_params(rr)
+                    mensaje = rr.get("mensaje_error", f"Error {sheet}.{col}")
+                    rules.append(
+                        Rule(
+                            sheet=sheet,
+                            columna=col,
+                            validator=val_name,
+                            params=params,
+                            mensaje=mensaje,
+                            conditions=parse_conditions(rr.get("condiciones", [])),
+                            valor=None
+                        )
+                    )
+                    continue
+
+                # ✅ Reglas fila a fila estándar
                 val_name, params = infer_validator_and_params(rr)
-                conds = parse_conditions(rr.get("condiciones", []))
                 mensaje = rr.get("mensaje_error", f"Error {sheet}.{col}")
                 rules.append(
                     Rule(
@@ -171,11 +212,13 @@ def load_rules(path_rules: str) -> List[Rule]:
                         validator=val_name,
                         params=params,
                         mensaje=mensaje,
-                        conditions=conds,
+                        conditions=parse_conditions(rr.get("condiciones", [])),
                         valor=None
                     )
                 )
+
     return rules
+
 
 
 def ejecutar_validaciones(
@@ -209,6 +252,7 @@ def ejecutar_validaciones(
                 continue
 
         # Otras reglas
+                # Otras reglas fila por fila y de dataframe
         for rule in [r for r in rules if r.sheet == sheet and r.validator != "estructura"]:
             validator: ValidatorFunc = get_validator(rule.validator)
             subset = df
@@ -217,7 +261,7 @@ def ejecutar_validaciones(
                 subset = df[mask]
 
             if rule.validator in ("unique", "group_sum_equal", "ref_sheet"):
-                # Para validadores que operan a nivel de DataFrame completo
+                # Validadores que operan a nivel DataFrame completo
                 errs = validator(None, None, None, rule, loaders=loader, dfs=dfs, df=df)
             else:
                 errs = []
@@ -226,9 +270,16 @@ def ejecutar_validaciones(
                     new_errs = validator(val, row, idx, rule, loaders=loader, dfs=dfs, df=df)
                     for e in new_errs:
                         if e.row is None:
-                            e.row = idx 
+                            e.row = idx
                     errs.extend(new_errs)
             errors.extend(errs)
+
+        # ✅ NUEVO: validaciones globales de hoja
+        # Cargar el JSON crudo para extraer __max_filas, suma_igual_a, agrupado_por
+        with open(path_rules, encoding="utf-8") as f:
+            reglas_json = json.load(f)
+        errores_globales = validar_globales_por_hoja(sheet, df, reglas_json)
+        errors.extend(errores_globales)
 
     return errors
 
@@ -287,3 +338,55 @@ def _match_condition(row: pd.Series, condition: Condition) -> bool:
     if op == "menor_o_igual_a":
         return v <= t
     return False
+def validar_globales_por_hoja(sheet_name, df, reglas_json):
+    """
+    Valida reglas globales a nivel hoja:
+    - __max_filas / __min_filas
+    - agrupado_por + valores_requeridos (por grupo)
+    """
+    errores = []
+    reglas_hoja = reglas_json.get(sheet_name, {})
+
+    # 1️⃣ __max_filas y __min_filas
+    max_filas = reglas_hoja.get("__max_filas")
+    min_filas = reglas_hoja.get("__min_filas")
+    total_filas = len(df)
+
+    if max_filas is not None and total_filas > max_filas:
+        errores.append(ValidationError(
+            sheet_name,
+            None,
+            None,
+            f"La hoja {sheet_name} permite máximo {max_filas} filas, pero tiene {total_filas}."
+        ))
+    if min_filas is not None and total_filas < min_filas:
+        errores.append(ValidationError(
+            sheet_name,
+            None,
+            None,
+            f"La hoja {sheet_name} requiere al menos {min_filas} filas, pero tiene {total_filas}."
+        ))
+
+    # 2️⃣ agrupado_por + valores_requeridos
+    for col, reglas_columna in reglas_hoja.items():
+        if col.startswith("_") or col not in df.columns:
+            continue
+        for regla in reglas_columna if isinstance(reglas_columna, list) else [reglas_columna]:
+            if "agrupado_por" in regla and "valores_requeridos" in regla:
+                agrupador = regla["agrupado_por"]
+                obligatorios = set(regla["valores_requeridos"])
+                if agrupador not in df.columns:
+                    continue
+                for group_val, grupo in df.groupby(agrupador):
+                    encontrados = set(grupo[col].dropna().unique())
+                    faltantes = obligatorios - encontrados
+                    if faltantes:
+                        errores.append(ValidationError(
+                            sheet_name,
+                            None,
+                            col,
+                            regla.get("mensaje_error",
+                                f"En {sheet_name} la ficha {group_val} no tiene todos los valores requeridos. Faltan: {', '.join(faltantes)}")
+                        ))
+
+    return errores

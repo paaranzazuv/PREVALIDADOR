@@ -737,7 +737,7 @@
         "igual_a": "Convencional"
       }
     ],
-    "igual_a": "",
+    "vacia": true,
     "mensaje_error": "El campo calificacionNoConvencional debe estar vacío cuando ConvencionalNoConvencional sea 'Convencional'"
   }
 ],

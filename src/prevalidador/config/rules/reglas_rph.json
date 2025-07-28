@@ -1,0 +1,1383 @@
+{
+    "Ficha":{
+        "_estructura":["NroFicha",
+        	"ObjectId",
+        	"NumCedCatastral",
+        	"Municipio",
+        	"Sector",
+        	"Corregimiento",
+        	"Barrio",
+        	"ManzanVereda",
+        	"Predio",
+        	"DireccionReferencia",
+        	"DireccionNombre",
+        	"DireccionReal",
+        	"CaracteristicaPredio",
+        	"AreaTotalLote",
+        	"AreaLoteComun",
+        	"TotalEdificios",
+        	"UnidadesEnRPH",
+        	"ApartamentosOCasas",
+        	"Locales",
+        	"GarajesCubiertos",
+        	"GarajesDescubiertos",
+        	"CuartosUtiles",
+        	"MatriculaMatriz",
+        	"PredioLcTipo",
+        	"Npn",
+        	"Tipo_Direccion",
+        	"Es_Direccion_Principal",
+        	"Codigo_Postal",
+        	"Clase_Via_Principal",
+        	"Valor_Via_Principal",
+        	"Letra_Via_Principal",
+        	"Letra_Via_Generadora",
+        	"Sector_Ciudad",
+        	"Valor_Via_Generadora",
+        	"Numero_Predio",
+        	"Sector_Predio",
+        	"Complemento"
+            ],
+
+
+        "__max_filas": 1,
+
+
+        "NroFicha": 
+         
+
+            {
+        "requerido": true,
+        "tipo": "numero",
+        "mayor_a": 0,
+        "longitud_max": 10,
+        "mensaje_error": "NroFicha debe ser un número entero positivo de hasta 10 dígitos."
+            }
+            ,
+
+        "Municipio":{
+        "igual_a": "615|RIONEGRO",
+        "mensaje_error": "El municipio debe ser Rionegro (615)."
+            }
+            ,
+        "DireccionReferencia":{
+        "requerido": true,
+        "vacia": false,
+        "mensaje_error": "DireccionReferencia es obligatoria y no puede estar vacía."
+            }
+            ,
+        "DireccionNombre":{
+        "requerido": true,
+        "vacia": false,
+        "mensaje_error": "DireccionNombre es obligatorio y no puede estar vacío."
+            }
+            ,
+        "DireccionReal":{
+        "requerido": true,
+        "vacia": false,
+        "mensaje_error": "DireccionReal es obligatoria y no puede estar vacía."
+            }
+            ,
+        "CaracteristicaPredio":{
+        "requerido": true,
+        "catalogo":"catalog_rph.xlsx:CaracteristicaPredio",
+        "mensaje_error": "CaracteristicaPredio es obligatoria y debe ser un valor válido del catálogo."
+            }
+            ,
+        "AreaTotalLote":{
+        "requerido": true,
+        "tipo": "numero",
+        "mayor_a": 0,
+        "mensaje_error":"AreaTotalLote es obligatorio y debe ser un número mayor a 0."
+            }
+            ,
+        "AreaLoteComun":{
+        "requerido": true,
+        "tipo": "numero",
+        "mayor_a": 0,
+        "mensaje_error":"AreaLoteComun es obligatorio y debe ser un número mayor a 0."
+            }
+            ,
+
+        "TotalEdificios":{
+        "requerido": true,
+        "tipo": "numero",
+        "mayor_a": 0,
+        "mensaje_error":"TotalEdificios es obligatorio y debe ser un número mayor a 0."
+            }
+            ,
+
+        "UnidadesEnRPH":{
+        "suma_columnas": [
+            "ApartamentosOCasas",
+            "Locales",
+            "GarajesCubiertos",
+            "GarajesDescubiertos",
+            "CuartosUtiles"
+        ],
+        "tipo": "numero",
+        "mayor_a": 0,
+        "mensaje_error": "UnidadesEnRPH debe ser igual a la suma de ApartamentosOCasas, Locales, GarajesCubiertos, GarajesDescubiertos y CuartosUtiles."
+        }
+        ,
+
+        "MatriculaMatriz":{
+        "requerido": true,
+        "vacia": false,
+        "regex": "^[0-9]+$",
+        "mensaje_error":"MatriculaMatriz es obligatorio."
+            }
+            ,
+
+        "Npn": [{
+        "requerido": true,
+        "vacia": false,
+        "tipo": "texto",
+  
+        "longitud_igual_a": 30,
+        "unico": true,
+        "mensaje_error":"El campo Npn debe tener una longitud de 30 caracteres y ser único" 
+            }
+            ],
+        "PredioLcTipo": {
+        "requerido": true,
+        "igual_a":"Predio.Privado.Privado",
+        "mensaje_error":"PredioLcTipo debe ser 'Predio.Privado.Privado'."
+            }
+            ,
+        "Tipo_Direccion": {
+        "requerido": true,
+        "igual_a": "Estructurada",
+        "mensaje_error": "Tipo_Direccion debe ser 'Estructurada'."
+            }
+            ,
+        "Es_Direccion_Principal": {
+        "requerido": true,
+        "igual_a":"Si",
+        "mensaje_error":"Es_Direccion_Principal debe ser 'Si'."
+            }
+               
+        
+    },
+    "ZonasHomogeneas": {
+        "_estructura": [
+            "NroFicha",
+            "Tipo", 
+            "Sector", 
+            "IdentificadorZona", 
+            "Área", 
+            "TipoZona"
+        ],
+
+        "__max_filas": 0
+
+    },
+
+
+    "CartografiaInformacionGrafica":{ 
+        "_estructura": [
+            "NroFicha",
+            "IndicePlancha",
+            "Ventana",
+            "Escala",
+            "Vigencia",
+            "IndiceVuelo",
+            "Faja",
+            "Foto",
+            "VigenciaAero",
+            "ampliacion",
+            "EscalaAero"
+        ],
+
+        "NroFicha": {
+        "referencia_hoja": "Ficha",
+        "referencia_columna": "NroFicha",
+        "mensaje_error": "El valor de NroFicha en la hoja Fichas debe existir en la hoja CartografiaInformacionGrafica"
+      },
+      "IndicePlancha": {
+        "requerido": true,
+        "vacia": false,
+        "mensaje_error": "IndicePlancha es obligatorio y no puede estar vacío."
+      },
+        "Ventana": {
+            "requerido": true,
+            "vacia": false,
+            "mensaje_error": "Ventana es obligatorio y no puede estar vacío."
+        },
+        "Escala": {
+            "requerido": true,
+            "vacia": false,
+            "mensaje_error": "Escala es obligatorio y no puede estar vacío."
+        },
+        "Vigencia": {
+            "requerido": true,
+            "vacia": false,
+            "mensaje_error": "Vigencia es obligatorio y no puede estar vacío."
+        },
+        "IndiceVuelo": {
+            "requerido": true,
+            "vacia": false,
+            "mensaje_error": "IndiceVuelo es obligatorio y no puede estar vacío."
+        },
+        "Faja": {
+            "requerido": true,
+            "vacia": false,
+            "mensaje_error": "Faja es obligatorio y no puede estar vacío."
+        },
+        "Foto": {
+            "requerido": true,
+            "vacia": false,
+            "mensaje_error": "Foto es obligatorio y no puede estar vacío."
+        },
+        "VigenciaAero": {
+            "requerido": true,
+            "vacia": false,
+            "mensaje_error": "VigenciaAero es obligatorio y no puede estar vacío."
+        },
+        "ampliacion": {
+            "requerido": true,
+            "vacia": false,
+            "mensaje_error": "ampliacion es obligatorio y no puede estar vacío."
+        }
+
+    
+
+    },
+
+    "Construcciones": {
+        "_estructura": [
+            "NroFicha",
+            "secuencia",
+            "NumeroConstruccion",
+            "ObjectIdConstruccion",
+            "ObjectIdModelo",
+            "TipoConstruccion",
+            "IdUso",
+            "ConvencionalNoConvencional",
+            "calificacionNoConvencional",
+            "Puntos",
+            "AreaConstruida",
+            "NumeroPisos",
+            "AñoConstruccion",
+            "PorcentajeConstruido",
+            "Tipificacion",
+            "TotalCocinas",
+            "TotalHabitaciones",
+            "TotalLocales",
+            "TotalBanos",
+            "Usos_Tradicionales_Culturales",
+            "ConservacionTipologia",
+            "TipologiaConvencional"
+        ],
+        "NroFicha": [{
+            "referencia_hoja": "Ficha",
+            "referencia_columna": "NroFicha",
+            "mensaje_error": "El valor de NroFicha en la hoja Fichas debe existir en la hoja Construcciones"
+        },
+        {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_a": 0,
+            "longitud_max": 10,
+            "mensaje_error": "NroFicha debe ser un número entero positivo de hasta 10 dígitos."
+        }
+        ],
+        "secuencia": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_a": 0,
+            "mensaje_error": "Secuencia debe ser un número entero positivo."
+        },
+        "NumeroConstruccion": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_a": 0,
+            "mensaje_error": "NumeroConstruccion debe ser un número entero positivo."
+        },
+        "TipoConstruccion": {
+            "requerido": true,
+            "catalogo": "catalog_rph.xlsx:TipoConstruccion",
+            "mensaje_error": "TipoConstruccion es obligatorio y debe ser un valor válido del catálogo."
+        },
+        "IdUso": {
+            "requerido": true,
+            "catalogo": "catalog_rph.xlsx:IdUso",
+            "mensaje_error": "IdUso es obligatorio y debe ser un valor válido del catálogo."
+        },
+        "ConvencionalNoConvencional": {
+            "requerido": true,
+            "catalogo": "catalog_rph.xlsx:ConvencionalNoConvencional",
+            "mensaje_error": "ConvencionalNoConvencional es obligatorio y debe ser un valor válido del catálogo."
+        },
+
+        "calificacionNoConvencional": [
+            {
+                "condiciones": [
+                    {
+                        "columna": "ConvencionalNoConvencional",
+                        "igual_a": "No Convencional"
+                    }
+                ],
+                "requerido": true,
+                "catalogo": "catalog_rph.xlsx:calificacionNoConvencional",
+                "mensaje_error": "El campo calificacionNoConvencional es obligatorio cuando ConvencionalNoConvencional es 'No Convencional'"
+            },
+            {
+                "condiciones": [
+                    {
+                        "columna": "ConvencionalNoConvencional",
+                        "igual_a": "Convencional"
+                    }
+                ],
+                "vacia": true,
+                "mensaje_error": "El campo calificacionNoConvencional debe estar vacío cuando ConvencionalNoConvencional sea 'Convencional'"
+            }
+        ],
+        "AreaConstruida": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_a": 0,
+            "mensaje_error": "AreaConstruida es obligatorio y debe ser un número mayor a 0."
+        },
+        "NumeroPisos": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_a": 0,
+            "mensaje_error": "NumeroPisos es obligatorio y debe ser un número mayor a 0."
+        },
+        "AñoConstruccion": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_a": 1850,
+            "mensaje_error": "AñoConstruccion es obligatorio y debe ser un número mayor a 1850."
+        },
+        "PorcentajeConstruido": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_a": 0,
+            "menor_o_igual_a": 100,
+            "mensaje_error": "PorcentajeConstruido es obligatorio y debe ser un número entre 0 y 100."
+        },
+        "Tipificacion": {
+            "requerido": true,
+            "igual_a": "0|Sin Tipificación",
+            "mensaje_error": "Tipificacion es obligatorio y debe ser '0|Sin Tipificación'."
+        },
+        "TotalCocinas": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_o_igual_a": 0,
+            "mensaje_error": "TotalCocinas es obligatorio y debe ser un número mayor o igual a 0."
+        },
+        "TotalHabitaciones": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_o_igual_a": 0,
+            "mensaje_error": "TotalHabitaciones es obligatorio y debe ser un número mayor o igual a 0."
+        },
+        "TotalLocales": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_o_igual_a": 0,
+            "mensaje_error": "TotalLocales es obligatorio y debe ser un número mayor o igual a 0."
+        },
+        "TotalBanos": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_o_igual_a": 0,
+            "mensaje_error": "TotalBanos es obligatorio y debe ser un número mayor o igual a 0."
+        },
+        "ConservacionTipologia":{
+            "requerido": true,
+            "catalogo": "catalog_rph.xlsx:ConservacionTipologia",
+            "mensaje_error": "ConservacionTipologia es obligatorio y debe ser un valor válido del catálogo."
+        },
+        "TipologiaConvencional":[
+        {"condiciones": [
+        { "columna": "ConvencionalNoConvencional",
+            "igual_a": "No Convencional(Anexos)" }
+        ],
+        "vacia": true,
+        "mensaje_error": "El campo TipologiaConvencional debe estar vacío cuando ConvencionalNoConvencional sea 'No Convencional(Anexos)'"
+        },
+         {
+        "condiciones": [
+        { "columna": "ConvencionalNoConvencional", 
+            "diferente_a": "No Convencional(Anexos)" }
+            
+        ],
+        "requerido": true,
+        "catalogo": "catalog_rph.xlsx:CUC_TipologiaTipo",
+        "mensaje_error": "El campo TipologiaConvencional es obligatorio y debe estar en el catálogo cuando ConvencionalNoConvencional sea diferente a 'No Convencional(Anexos)'"
+        }
+        ]
+
+      },
+      "CalificacionesConstrucciones":{
+        "_estructura":[
+            "Secuencia",
+            "Armazon",
+            "Muro",
+            "Cubierta",
+            "Conservacion",
+            "Fachada",
+            "CubrimientoMuro",
+            "Piso",
+            "ConservacionPrincipales",
+            "TamanioBanio",
+            "EnchapesBanio",
+            "MobiliarioBanio",
+            "ConservacionBanio",
+            "TamanioCocina",
+            "Enchape",
+            "MobiliarioCocina",
+            "ConservacionCocina",
+            "ComplementoIndustrial",
+            "Altura"
+        ],
+        "__max_filas": 0
+
+      },
+      "ConstruccionesGenerales": {
+        "_estructura": [
+            "Secuencia",
+            "Descripcion"
+        ],
+        "Secuencia":{
+            "referencia_hoja": "Construcciones",
+            "referencia_columna": "secuencia",
+            "mensaje_error": "El valor de secuencia en la hoja ConstruccionesGenerales debe existir en la hoja Construcciones"
+        }
+        ,
+        "Descripcion":{
+            "requerido": true,
+            "vacia": false,
+            "catalogo": "catalog_rph.xlsx:DescripcionConstruccion",
+            "mensaje_error": "Descripcion es obligatorio y debe ser un valor válido del catálogo."
+        }
+
+      },
+      "Colindantes":{
+        "_estructura": [
+            "NroFicha",
+            "Orientacion",
+            "Colindante"
+        ],
+        "NroFicha": {
+            "referencia_hoja": "Ficha",
+            "referencia_columna": "NroFicha",
+            "mensaje_error": "El valor de NroFicha en la hoja Fichas debe existir en la hoja Colindantes"
+        },
+        "Orientacion": 
+    {
+            "agrupado_por": "NroFicha",
+            "valores_requeridos": ["SUR", "ESTE", "NORTE", "OESTE"],
+            "mensaje_error": "Cada NroFicha debe tener al menos las orientaciones SUR, ESTE, NORTE y OESTE."
+    }
+    ,
+        "Colindante": {
+            "requerido": true,
+            "vacia": false,
+            "mensaje_error": "Colindante es obligatorio y no puede estar vacío."
+        }
+      },
+      "Edificios":{
+        "_estructura": [
+           "NroFicha",
+           "NumeroEdificio",
+           "PkEdificio",
+           "ObjectId",
+           "NumeroPisos",
+           "NumeroUnidadesPrediales",
+           "AreaOcupadaEdificio",
+           "AreaConstruidaComun",
+           "Locales",
+           "CuartosUtiles",
+           "GarajesCubiertos",
+           "GarajesDescubiertos"
+        ],
+        "__min_filas": 1,
+
+        "NroFicha": {
+            "referencia_hoja": "Ficha",
+            "referencia_columna": "NroFicha",
+            "mensaje_error": "El valor de NroFicha en la hoja Fichas debe existir en la hoja Edificios"
+        },
+
+        "NumeroEdificio": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_a": 0,
+            "mensaje_error": "NumeroEdificio debe ser un número entero positivo."
+        },
+
+        "NumeroPisos": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_a": 0,
+            "mensaje_error": "NumeroPisos debe ser un número entero positivo."
+        },
+
+        "NumeroUnidadesPrediales": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_a": 0,
+            "mensaje_error": "NumeroUnidadesPrediales debe ser un número entero positivo."
+        },
+
+        "AreaOcupadaEdificio": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_a": 0,
+            "mensaje_error": "AreaOcupadaEdificio debe ser un número entero positivo."
+        },
+
+       
+
+        "Locales": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_o_igual_a": 0,
+            "mensaje_error": "Locales debe ser un número entero positivo."
+        },
+
+        "CuartosUtiles": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_o_igual_a": 0,
+            "mensaje_error": "CuartosUtiles debe ser un número entero positivo."
+        },
+
+        "GarajesCubiertos": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_o_igual_a": 0,
+            "mensaje_error": "GarajesCubiertos debe ser un número entero positivo."
+        },
+
+        "GarajesDescubiertos": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_o_igual_a": 0,
+            "mensaje_error": "GarajesDescubiertos debe ser un número entero positivo."
+        }
+
+    },
+
+    "FichasPrediales":{
+
+        "_estructura": [
+            "NroFicha",
+            "ObjectIdPredio",
+            "ObjectIdEdificio",	
+            "NumCedulaCatastral",
+            "edificio",
+            "UnidadPredial",
+            "ModeloRegistral",
+            "Libro",
+            "Tomo",
+            "Pagina",
+            "MatriculaInmobiliaria",
+            "circulo",
+            "NumeroRadicado",
+            "Resolucion",
+            "FechaResolucion",
+            "TipoMutacion",
+            "CaracteristicaPredio",
+            "Servidumbre",
+            "DireccionReferencia",
+            "DireccionReal",
+            "DireccionNombre",
+            "DestinoEconomico",
+            "CoeficienteCopropiedad",
+            "AreaLotePrivada",
+            "ModoAdquisicion",
+            "Litigio",
+            "PorcentajeLitigio",
+            "NumeroEdificio",
+            "Piso",
+            "Lado",
+            "IdModeloPiso",
+            "PredioLcTipo",
+            "Npn",
+            "Tipo_Direccion",
+            "Es_Direccion_Principal",
+            "Codigo_Postal",
+            "Clase_Via_Principal",
+            "Valor_Via_Principal",
+            "Letra_Via_Principal",
+            "Letra_Via_Generadora",
+            "Sector_Ciudad",
+            "Valor_Via_Generadora",
+            "Numero_Predio",
+            "Sector_Predio",
+            "Complemento"
+
+        ],
+
+         "NroFicha": [
+    
+      {
+        "tipo": "numero",
+        "mensaje_error": "El campo NroFicha debe ser un número"
+      },
+      {
+        "mayor_a": 0,
+        "mensaje_error": "El campo NroFicha debe ser mayor a 0"
+      },
+      {
+        "requerido": true,
+         "mensaje_error": "El campo NroFicha es obligatorio"},
+        {"unico": true,
+         "mensaje_error": "El campo NroFicha debe ser único"},
+         {
+        "referencia_hoja": "Propietarios",
+        "referencia_columna": "NroFicha",
+        "mensaje_error": "El valor de NroFicha en la hoja Fichas debe existir en la hoja Propietarios"
+      }
+      ],
+
+      "edificio": [
+        {
+            "referencia_hoja": "Edificios",
+            "referencia_columna": "NumeroEdificio",
+            "mensaje_error": "El valor de NumeroEdificio en la hoja FichasPrediales debe existir en la hoja Edificios"
+        },
+        {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_a": 0,
+            "mensaje_error": "El campo edificio debe ser un número entero positivo."
+        }
+      
+      ],
+        "UnidadPredial": 
+            {
+                "requerido": true,
+                "tipo": "numero",
+                "mayor_a": 0,
+                "mensaje_error": "UnidadPredial debe ser un número entero positivo."
+            }
+        ,
+        "ModeloRegistral": 
+            {
+                "igual_a":"NUE|Nuevo",
+                "mensaje_error": "ModeloRegistral debe ser 'NUE|Nuevo'."
+            }
+        ,
+        "Libro": 
+            {
+                "requerido": true,
+                "tipo": "numero",
+                "igual_a": 0,
+                "mensaje_error": "Libro debe ser 0."
+            }
+        ,
+        "Tomo": 
+            {
+                "requerido": true,
+                "tipo": "numero",
+                "igual_a": 0,
+                "mensaje_error": "Tomo debe ser 0."
+            }
+        ,
+        "Pagina": 
+            {
+                "requerido": true,
+                "tipo": "numero",
+                "igual_a": 0,
+                "mensaje_error": "Pagina debe ser 0."
+            }
+        ,
+
+        "MatriculaInmobiliaria": [
+            {
+                "requerido": true,
+                "mensaje_error": "MatriculaInmobiliaria es obligatorio y no puede estar vacío."
+            },
+            {
+                "unico": true,
+                 "mensaje_error": "MatriculaInmobiliaria debe ser un número único"
+            },
+
+
+
+           {
+               "menor_o_igual_a": 260000,
+               "mensaje_error": "Si en la posición 22 de Npn no está '2', MatriculaInmobiliaria debe ser un número menor o igual a 260000"
+           },
+           {
+               "longitud_max": 6,
+               "mensaje_error": "Si en la posición 22 de Npn no está '2', MatriculaInmobiliaria debe ser un número único,  con una longitud máxima de 6 caracteres"
+           }
+       ],
+
+        "circulo": [
+            {"tipo":"texto",
+            "mensaje_error": "El campo círculo debe ser un texto"},
+            
+            {"igual_a": "020",
+            "mensaje_error": "El campo círculo debe ser '020'"},
+            {"longitud_igual_a": 3,
+            "mensaje_error": "El campo círculo debe tener una longitud de 3 caracteres"},
+            {"requerido": true,
+            "mensaje_error":" El campo círculo es obligatorio"}
+            ],
+            "CaracteristicaPredio": 
+            {
+                "requerido": true,
+                "catalogo": "catalog_rph.xlsx:CaracteristicaPredio",
+                "mensaje_error": "CaracteristicaPredio es obligatorio y debe ser un valor válido del catálogo."
+            }
+            ,
+            "Servidumbre":{
+                "requerido": true,
+                "igual_a": "No",
+                "mensaje_error": "El campo Servidumbre debe ser 'No'."
+            },
+            "DireccionReferencia":{
+                "requerido": true,
+                "vacia": false,
+                "mensaje_error": "DireccionReferencia es obligatoria y no puede estar vacía."
+            },
+            "DireccionReal":{
+                "requerido": true,
+                "vacia": false,
+                "mensaje_error": "DireccionReal es obligatoria y no puede estar vacía."
+            },
+            "DireccionNombre":{
+                "requerido": true,
+                "vacia": false,
+                "mensaje_error": "DireccionNombre es obligatorio y no puede estar vacío."
+            },
+            "DestinoEconomico":{
+                "requerido": true, 
+                "catalogo": "catalog_rph.xlsx:DestinoEconomico",
+                "mensaje_error": "DestinoEconomico es obligatorio y debe ser un valor válido del catálogo."
+            },
+             "CoeficienteCopropiedad":
+            [{
+                "requerido": true,
+                "tipo": "numero",
+                "mayor_a": 0,
+                "mensaje_error": "CoeficienteCopropiedad es obligatorio y debe ser un número mayor a 0."
+            },
+            {
+                "suma_igual_a": 100,
+                "mensaje_error": "La suma de todos los valores en CoeficienteCopropiedad debe ser exactamente 100."
+            }
+        ],
+
+        "AreaLotePrivada":[
+            {
+                "condiciones": [
+                    {
+                        "columna": "CaracteristicaPredio",
+                        "igual_a": "3|Parcelacion"
+                    }
+                ],
+                "requerido": true,
+                "tipo": "numero",
+                "mayor_a": 0,
+                "mensaje_error": "El campo AreaLotePrivada es mayor a 0 cuando CaracteristicaPredio es '3|Parcelacion'"
+            },
+            {
+                "condiciones": [
+                    {
+                        "columna": "CaracteristicaPredio",
+                        "igual_a": "2|RPH"
+                    }
+                ],
+
+                "requerido": true,
+                "tipo": "numero",
+                "igual_a": 0,
+                "mensaje_error": "El campo AreaLotePrivada debe estar vacío cuando CaracteristicaPredio sea diferente a '3|Parcelacion'"
+            }
+        ],
+        "ModoAdquisicion": {
+            "requerido": true,
+            "igual_a": "1|DOMINIO",
+            "mensaje_error": "ModoAdquisicion debe ser '1|DOMINIO'."
+        },
+        "Litigio": {
+            "requerido": true,
+            "igual_a": "No",
+            "mensaje_error": "Litigio debe ser 'No'."
+        },
+        "PorcentajeLitigio": {
+            "requerido": true,
+            "tipo": "numero",
+            "igual_a": 0,            
+            "mensaje_error": "PorcentajeLitigio debe ser 0 cuando Litigio es 'No'."
+        },
+        "Piso": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_o_igual_a": 1,
+            "mensaje_error": "Piso debe ser un número entero positivo."
+        },
+        "PredioLcTipo": {
+            "requerido": true,
+            "igual_a": "Predio.Privado.Privado",
+            "mensaje_error": "PredioLcTipo debe ser 'Predio.Privado.Privado'."
+        },
+        "Npn": {
+            "requerido": true,
+            "vacia": false,
+            "tipo": "texto",
+            "longitud_igual_a": 30,
+            "unico": true,
+            "mensaje_error": "El campo Npn debe tener una longitud de 30 caracteres y ser único"
+        },
+        "Tipo_Direccion": {
+            "requerido": true,
+            "igual_a": "Estructurada",
+            "mensaje_error": "Tipo_Direccion debe ser 'Estructurada'."
+        },
+        "Es_Direccion_Principal":
+            {
+                "requerido": true,
+                "igual_a": "Si",
+                "mensaje_error": "Es_Direccion_Principal debe ser 'Si'."
+            }
+        
+
+
+
+
+    },
+    "ConstruccionesFicha":{
+        "_estructura": ["NroFicha",
+                        "Secuencia",	
+                        "NumeroConstruccion",	
+                        "ObjectIdConstruccion",	
+                        "ObjectIdModelo",	
+                        "TipoConstruccion",	
+                        "IdentificadorUso",	
+                        "ConvencionalNoConvencional",	
+                        "calificacionNoConvencional",	
+                        "Puntos",	
+                        "AreaConstruida",	
+                        "NumeroPisos",	
+                        "AñoConstruccion",	
+                        "PorcentajeConstruccion",	
+                        "Tipificacion",	
+                        "TotalCocinas",	
+                        "TotalHabitaciones",	
+                        "TotalLocales",	
+                        "TotalBanos",	
+                        "Usos_Tradicionales_Culturales",	
+                        "ConservacionTipologia",	
+                        "TipologiaConvencional"],
+        "NroFicha": {
+            "referencia_hoja": "FichasPrediales",
+            "referencia_columna": "NroFicha",
+            "mensaje_error": "El valor de NroFicha en la hoja FichasPrediales debe existir en la hoja ConstruccionesFicha"
+        },
+        "Secuencia": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_a": 0,
+            "mensaje_error": "Secuencia debe ser un número entero positivo."
+        },
+        "NumeroConstruccion": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_a": 0,
+            "mensaje_error": "NumeroConstruccion debe ser un número entero positivo."
+        },
+        "TipoConstruccion":
+            {
+                "requerido": true,
+                "catalogo": "catalog_rph.xlsx:TipoConstruccion",
+                "mensaje_error": "TipoConstruccion es obligatorio y debe ser un valor válido del catálogo."
+            }
+        ,
+        "IdentificadorUso": {
+            "requerido": true,
+            "catalogo": "catalog_rph.xlsx:IdUso",
+            "mensaje_error": "IdentificadorUso es obligatorio y debe ser un valor válido del catálogo."
+        },
+        "ConvencionalNoConvencional": {
+            "requerido": true,
+            "catalogo": "catalog_rph.xlsx:ConvencionalNoConvencional",
+            "mensaje_error": "ConvencionalNoConvencional es obligatorio y debe ser un valor válido del catálogo."
+        },
+        "calificacionNoConvencional": [
+            {
+                "condiciones": [
+                    {
+                        "columna": "ConvencionalNoConvencional",
+                        "igual_a": "No Convencional"
+                    }
+                ],
+                "requerido": true,
+                "catalogo": "catalog_rph.xlsx:calificacionNoConvencional",
+                "mensaje_error": "El campo calificacionNoConvencional es obligatorio cuando ConvencionalNoConvencional es 'No Convencional'"
+            },
+            {
+                "condiciones": [
+                    {
+                        "columna": "ConvencionalNoConvencional",
+                        "igual_a": "Convencional"
+                    }
+                ],
+                "vacia": true,
+                "mensaje_error": "El campo calificacionNoConvencional debe estar vacío cuando ConvencionalNoConvencional sea 'Convencional'"
+            }
+        ],
+        "AreaConstruida": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_a": 0,
+            "mensaje_error": "AreaConstruida es obligatorio y debe ser un número mayor a 0."
+        },
+        "NumeroPisos":{
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_a": 0,
+            "mensaje_error": "NumeroPisos es obligatorio y debe ser un número mayor a 0."
+        },
+        "AñoConstruccion": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_a": 1850,
+            "mensaje_error": "AñoConstruccion es obligatorio y debe ser un número mayor a 1850."
+        },
+        "PorcentajeConstruccion": {
+            "requerido": true,
+            "tipo": "numero",
+            "igual_a": 100,
+            "mensaje_error": "PorcentajeConstruccion es obligatorio y debe ser 100."
+        },
+        "Tipificacion": {
+            "requerido": true,
+            "igual_a": "0|Sin Tipificación",
+            "mensaje_error": "Tipificacion es obligatorio y debe ser '0|Sin Tipificación'."
+        },
+
+        "TotalCocinas": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_o_igual_a": 0,
+            "mensaje_error": "TotalCocinas es obligatorio y debe ser un número mayor o igual a 0."
+        },
+        "TotalHabitaciones": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_o_igual_a": 0,
+            "mensaje_error": "TotalHabitaciones es obligatorio y debe ser un número mayor o igual a 0."
+        },
+        "TotalLocales": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_o_igual_a": 0,
+            "mensaje_error": "TotalLocales es obligatorio y debe ser un número mayor o igual a 0."
+        },
+
+        "TotalBanos": {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_o_igual_a": 0,
+            "mensaje_error": "TotalBanos es obligatorio y debe ser un número mayor o igual a 0."
+        }
+
+
+
+
+    },
+    "CalificacionesConsFicha": {
+        "_estructura": [
+            "Secuencia",
+            "Armazon",
+            "Muro",
+            "Cubierta",
+            "Conservacion",
+            "Fachada",
+            "Cubrimiento Muro",
+            "Piso",
+            "ConservacionPrincipales",
+            "TamanioBanio",
+            "EnchapesBanio",
+            "MobiliarioBanio",
+            "ConservacionBanio",
+            "TamanioCocina",
+            "Enchape",
+            "MobiliarioCocina",
+            "ConservacionCocina",
+            "ComplementoIndustrial",
+            "Altura"
+        ],
+        "__max_filas": 0
+
+    },
+    "ConstruccionGeneralFicha": {
+        "_estructura": [
+            "Secuencia",
+            "Descripcion"
+        ],
+        "Secuencia": {
+            "referencia_hoja": "ConstruccionesFicha",
+            "referencia_columna": "Secuencia",
+            "mensaje_error": "El valor de Secuencia en la hoja ConstruccionGeneralFicha debe existir en la hoja ConstruccionesFicha"
+        },
+        "Descripcion": {
+            "requerido": true,
+            "vacia": false,
+            "catalogo": "catalog_rph.xlsx:DescripcionConstruccion",
+            "mensaje_error": "Descripcion es obligatorio y debe ser un valor válido del catálogo."
+        }
+    },
+    "ColindantesFicha": {
+        "_estructura": [
+            "NroFicha",
+            "Orientacion",
+            "Colindante"
+        ],
+        "NroFicha": {
+            "referencia_hoja": "FichasPrediales",
+            "referencia_columna": "NroFicha",
+            "mensaje_error": "El valor de NroFicha en la hoja FichasPrediales debe existir en la hoja ColindantesFicha"
+        },
+        "Orientacion": {
+            "agrupado_por": "NroFicha",
+            "valores_requeridos": ["SUR", "ESTE", "NORTE", "OESTE", "NADIR", "CENIT"],
+            "mensaje_error": "Cada NroFicha debe tener al menos las orientaciones SUR, ESTE, NORTE y OESTE."
+        },
+        "Colindante": {
+            "requerido": true,
+            "vacia": false,
+            "mensaje_error": "Colindante es obligatorio y no puede estar vacío."
+        }
+    },
+    "Propietarios":{
+        "_estructura": [
+            "NroFicha",
+            "TipoDocumento",
+            "Documento",
+            "CalidadPropietario",
+            "Derecho",
+            "Gravable",
+            "CalidadPropietarioOficial",
+            "Fecha",
+            "CodigoFideicomiso",
+            "Escritura",
+            "FechaEscritura",
+            "ValorCompra",
+            "Entidad",
+            "EntidadDepartamento",
+            "EntidadMunicipio",
+            "NumeroFallo",
+            "SiglaComercial",
+            "RazonSocial",
+            "PrimerNombre",
+            "SegundoNombre",
+            "PrimerApellido",
+            "SegundoApellido",
+            "DepartamentoPersona",
+            "MunicipioPersona",
+            "Telefono",
+            "Direccion",
+            "Sexo",
+            "Grupo_Etnico",
+            "AutorreconocimientoCampesino",
+            "CorreoElectronico",
+            "AutorizaNotificaciones",
+            "Nombre_Pueblo",
+            "Nombre_Comunidad"
+        ],
+        "NroFicha": 
+      {
+        "referencia_hoja": "Fichas",
+        "referencia_columna": "NroFicha",
+        "mensaje_error": "El valor de NroFicha en la hoja Propietarios debe existir en la hoja Fichas",
+        "requerido": true
+      }
+    ,
+    "TipoDocumento":{
+      "validator": "catalog",
+     "requerido": true,
+     "catalogo": "catalog_rph.xlsx:TipoDocumento",
+     "mensaje_error": "El TipoDocumento es obligatorio y debe estar en el catálogo"
+    },
+    "Documento": [
+      {
+        "requerido": true,
+        "tipo": "texto",
+        "longitud_max": 20,
+        "mensaje_error": "El Documento no puede exceder los 20 caracteres"
+      },
+      {
+        "condiciones": [
+          { "columna": "TipoDocumento", "igual_a": "3|NIT" }
+        ],
+        "longitud_igual_a": 9,
+        "mensaje_error": "Si TipoDocumento es 'NIT', el Documento debe tener exactamente 9 caracteres"
+      },
+      {
+        "condiciones": [
+          { "columna": "TipoDocumento", "diferente_a": "7|PASAPORTE" }
+        ],
+        "regex": "^[0-9]+$",
+        "mensaje_error": "Si TipoDocumento no es 'Pasaporte', el Documento debe contener solo dígitos"
+      }
+
+     
+      
+    ],
+    "Derecho": 
+      {
+        "agrupado_por": "NroFicha",
+        "suma_igual_a": 100,
+        "requerido": true,
+        "mensaje_error": "La suma de 'Derecho' agrupada por 'NroFicha' debe ser igual a 100"
+      }
+    ,
+
+    "CalidadPropietario": {
+      "requerido": true,
+      "catalogo": "catalog_rph.xlsx:CalidadPropietario",
+      "mensaje_error": "El campo CalidadPropietario es obligatorio y debe estar en el catálogo"
+    },
+
+  "Gravable": [
+  {
+    "condiciones": [
+      { "columna": "CalidadPropietario", "in": ["4|MUNICIPAL","3|DEPARTAMENTAL","2|NACIONAL"] }
+    ],
+    "igual_a": "No",
+    "mensaje_error": "Si CalidadPropietario es '4|MUNICIPAL', '3|DEPARTAMENTAL' o '2|NACIONAL', entonces Gravable debe ser 'No'"
+  },
+  {
+    "condiciones": [
+      { "columna": "CalidadPropietario", "not_in": ["4|MUNICIPAL","3|DEPARTAMENTAL","2|NACIONAL"] }
+    ],
+    "igual_a": "Si",
+    "mensaje_error": "Si CalidadPropietario no es '4|MUNICIPAL', '3|DEPARTAMENTAL' o '2|NACIONAL', entonces Gravable debe ser 'Si'"
+  },
+  {
+    "requerido": true,
+    "catalogo": "catalog_rph.xlsx:Sino",
+    "mensaje_error": "El campo Gravable es obligatorio y debe estar en el catálogo"
+  }
+],
+
+
+"CalidadPropietarioOficial": [
+  {
+    "condiciones": [
+      {
+        "columna": "CalidadPropietarioOficial",
+        "igual_a_columna": "CalidadPropietario"
+      }
+    ],
+    "mensaje_error": "CalidadPropietarioOficial debe ser igual a CalidadPropietario"
+  },
+  {
+    "requerido": true,
+    "mensaje_error": "El campo CalidadPropietarioOficial es obligatorio y debe ser igual a CalidadPropietario"
+  }
+],
+"Fecha": [
+  {
+    "requerido": true,
+    "formato": "dd/mm/yyyy",
+    "mensaje_error": "La Fecha debe ser una fecha válida en formato dd/mm/yyyy"
+  },
+  { "formato": "dd/mm/yyyy",
+    "mayor_o_igual_a": "01/01/1940",
+    "menor_o_igual_a": "31/12/2025",
+    "mensaje_error": "La Fecha debe estar entre el 01/01/1940 y el 31/12/2025"
+  }
+],
+"CodigoFideicomiso": {
+    "requerido": true,
+    "tipo": "texto",
+    "igual_a": "0",
+    "mensaje_error": "El CodigoFideicomiso debe ser '0'"
+  },
+
+  "Escritura": {
+    "requerido": true,
+    "tipo": "texto",
+    "longitud_max": 5,
+    "mensaje_error": "El campo Escritura no puede exceder los 5 caracteres"
+  },
+ 
+"FechaEscritura": [
+  {
+    "requerido": true,
+    "formato": "dd/mm/yyyy",
+    "mensaje_error": "La FechaEscritura debe ser una fecha válida en formato dd/mm/yyyy"
+  },
+  {
+    "formato": "dd/mm/yyyy",
+    "mayor_o_igual_a": "01/01/1960",
+    "menor_o_igual_a": "31/12/2025",
+    "mensaje_error": "La FechaEscritura debe estar entre el 01/01/1960 y el 31/12/2025"
+  },
+  {
+    "condiciones": [
+      {
+        "columna": "FechaEscritura",
+        "mayor_a_columna": "Fecha"
+      }
+    ],
+    "mensaje_error": "La FechaEscritura debe ser posterior a la FechaRegistro"
+  }
+],
+
+  
+ 
+  "ValorCompra": {
+    "requerido": true,
+    "tipo": "numero",
+    "mayor_o_igual_a": 0,
+    "mensaje_error": "Valor compra Campo obligatorio igual a 0 o mayor"
+  },
+
+
+  "Entidad": {
+    "requerido": true,
+    "catalogo": "catalog_rph.xlsx:Entidad",
+    "mensaje_error": "El campo Entidad es obligatorio y debe estar en el catálogo"
+  },
+
+  "EntidadDepartamento": {
+    "requerido": true,
+    "catalogo": "catalog_rph.xlsx:Departamento",
+    "mensaje_error": "El campo EntidadDepartamento es obligatorio y debe estar en el catálogo"
+  },
+
+  "EntidadMunicipio": {
+    "requerido": true,
+    "longitud_max": 3,
+    "tipo": "texto",
+    "mensaje_error": "El campo EntidadMunicipio es obligatorio y debe tener una longitud máxima de 3 caracteres"
+  },
+
+  "NumeroFallo": {
+    "requerido": true,
+    "mensaje_error": "El campo NumeroFallo es obligatorio"
+  },
+
+
+  "RazonSocial": [
+  {
+    "condiciones": [
+      { "columna": "TipoDocumento", "igual_a": "3|NIT" }
+    ],
+    "requerido": true,
+    "mensaje_error": "El campo RazonSocial es obligatorio cuando TipoDocumento es '3|NIT'"
+  },
+  {
+    "condiciones": [
+      { "columna": "TipoDocumento", "distinto_a": "3|NIT" }
+    ],
+    "vacia": true,
+    "mensaje_error": "El campo RazonSocial debe estar vacío cuando TipoDocumento no sea '3|NIT'"
+  }
+],
+ 
+"PrimerNombre": [
+    
+    {
+      "condiciones": [
+        { "columna": "TipoDocumento", "distinto_a": "3|NIT" }
+      ],
+      "requerido": true,
+      "mensaje_error": "El campo PrimerNombre debe estar lleno cuando TipoDocumento  sea distinto de '3|NIT'"
+    }
+  ],
+
+ "SegundoNombre": [
+    {
+      "condiciones": [
+        { "columna": "TipoDocumento", "igual_a": "3|NIT" }
+      ],
+      "vacia": true,
+      "mensaje_error": "El campo SegundoNombre debe estar vacío cuando TipoDocumento sea '3|NIT'"
+    }
+
+  ],
+  
+  "PrimerApellido": [
+    
+    {
+      "condiciones": [
+        { "columna": "TipoDocumento", "distinto_a": "3|NIT" }
+      ],
+      "requerido": true,
+      "mensaje_error": "El campo PrimerApellido debe estar lleno cuando TipoDocumento  sea distinto de '3|NIT'"
+    }
+  ],
+
+  "SegundoApellido": [
+    {
+      "condiciones": [
+        { "columna": "TipoDocumento", "igual_a": "3|NIT" }
+      ],
+      "vacia": true,
+      "mensaje_error": "El campo SegundoApellido debe estar vacío cuando TipoDocumento sea '3|NIT'"
+      
+    }
+  ],
+
+
+  "Sexo": [
+    {
+      "condiciones": [
+        { "columna": "TipoDocumento", "igual_a": "3|NIT" }
+      ],
+      "igual_a": "X|SIN DETERMINAR",
+      "mensaje_error": "El campo Sexo debe estar X|SIN DETERMINAR cuando TipoDocumento sea '3|NIT'"
+    },
+    {
+      "requerido": true,
+      "catalogo": "catalog_rph.xlsx:Genero",
+      "mensaje_error": "El campo Sexo es obligatorio y debe ser uno de la lista"
+    }
+  ],
+  "AutorreconocimientoCampesino": {
+    "requerido": true,
+    "catalogo": "catalog_rph.xlsx:Sino",
+    "mensaje_error": "El campo AutorreconocimientoCampesino es obligatorio y debe estar en el catálogo"
+  },
+
+
+  "AutorizaNotificaciones": {
+    "requerido": true,
+    "catalogo": "catalog_rph.xlsx:Sino",
+    "mensaje_error": "El campo AutorizaNotificaciones es obligatorio y debe estar en el catálogo"
+  }
+
+
+},
+"AvaluoPuntual": {
+    "_estructura": [
+        "NroFicha",
+        "AvaluoTotal",
+        "Vigencia"
+    ],
+    "__max_filas":0
+    },
+    "DatosVisita":{
+        "_estructura":[
+            "PrimerNombre",
+            "SegundoNombre",
+            "PrimerApellido",
+            "SegundoApellido",
+            "Celular",
+            "Direccion",
+            "Autoriza_Notificaciones",
+            "Npn_Anterior"
+        ],
+        "__max_filas":0
+    }
+
+    }
+
+
+
+

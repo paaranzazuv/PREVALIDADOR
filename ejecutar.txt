@@ -1,0 +1,6 @@
+python -m src.prevalidador.main ^
+  data/inbox ^
+  src/prevalidador/config/rules ^
+  src/prevalidador/config/catalogs ^
+  data/historico ^
+  data/resultados

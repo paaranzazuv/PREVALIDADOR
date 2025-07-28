@@ -262,6 +262,115 @@ def validate_ref_sheet(_value, _row, _idx, rule: Rule, loaders=None, dfs=None, d
     return errors
 
 
+@register("suma_columnas")
+def validar_suma_columnas(value, row, idx, rule, **kwargs):
+    """
+    Valida que el valor de la columna actual sea igual
+    a la suma de otras columnas especificadas en 'suma_columnas'.
+    """
+    columnas_sumar = rule.get("suma_columnas", [])
+    suma = 0
+    for col in columnas_sumar:
+        try:
+            suma += float(row.get(col, 0) or 0)
+        except ValueError:
+            pass  # si hay texto lo ignora
+    
+    if value != suma:
+        return [ValidationError(
+            sheet=kwargs.get("sheet_name"),
+            row=idx,
+            col=row.name,
+            message=rule.get("mensaje_error", f"El valor {value} debe ser igual a la suma {suma}")
+        )]
+    return []
+
+
+@register("mayor_a_columna")
+def validate_mayor_a_columna(value: Any, row: pd.Series, idx: int, rule: Rule, **kwargs) -> List[ValidationError]:
+    """
+    Valida que el valor sea mayor que el de otra columna en la misma fila.
+    Soporta números y fechas en formato dd/mm/yyyy.
+    """
+    col_ref = rule.params.get("mayor_a_columna")
+    val_ref = row.get(col_ref)
+
+    # Si ambos valores están vacíos, no hay validación
+    if pd.isna(value) or pd.isna(val_ref):
+        return []
+
+    # Helper para parsear fechas
+    def parse_fecha(v):
+        try:
+            return datetime.strptime(str(v).strip(), "%d/%m/%Y")
+        except Exception:
+            return None
+
+    # Intentar comparar como fechas primero
+    v_actual_fecha = parse_fecha(value)
+    v_ref_fecha = parse_fecha(val_ref)
+
+    if v_actual_fecha and v_ref_fecha:
+        if v_actual_fecha <= v_ref_fecha:
+            return [ValidationError(
+                rule.sheet,
+                idx,
+                rule.columna,
+                rule.mensaje or f"La fecha debe ser posterior a {col_ref}"
+            )]
+        return []
+
+    # Si no son fechas válidas, intentar comparar como números
+    try:
+        v_actual_num = float(value)
+        v_ref_num = float(val_ref)
+        if v_actual_num <= v_ref_num:
+            return [ValidationError(
+                rule.sheet,
+                idx,
+                rule.columna,
+                rule.mensaje or f"El valor debe ser mayor al de {col_ref}"
+            )]
+    except (ValueError, TypeError):
+        return [ValidationError(
+            rule.sheet,
+            idx,
+            rule.columna,
+            rule.mensaje or f"No se puede comparar con la columna {col_ref}"
+        )]
+
+    return []
+
+@register("group_sum_equal")
+def group_sum_equal_validator(_, __, ___, rule: Rule, **kwargs) -> List[ValidationError]:
+    df = kwargs.get("df")
+    errores = []
+
+    group_col = rule.params.get("group_by")
+    target = rule.params.get("target")
+
+    if df is None or group_col not in df.columns or rule.columna not in df.columns:
+        return []
+
+    try:
+        df[rule.columna] = pd.to_numeric(df[rule.columna], errors="coerce")
+    except Exception:
+        return []
+
+    grouped = df.groupby(group_col)
+    for group_val, grupo_df in grouped:
+        suma = grupo_df[rule.columna].dropna().sum()
+        if suma != target:
+            errores.append(ValidationError(
+                sheet=rule.sheet,
+                row=None,
+                col=rule.columna,
+                message=rule.mensaje or f"Grupo '{group_val}': suma de {rule.columna} es {suma} pero se esperaba {target}"
+            ))
+    return errores
+
+
+
 
 # Alias
 _registry['distinto_a'] = _registry.get('not_in_list')

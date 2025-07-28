@@ -1,15 +1,5 @@
-# src/prevalidador/_internals/loaders.py
-
-"""
-Carga de catálogos externos (XLSX o CSV) con caching para optimizar accesos.
-Soporta:
-  - Modo single-file: precarga TODAS las hojas de un único Excel (.xlsx/.xlsm/.xls).
-  - Modo carpeta: carga archivo a archivo (.xlsx/.csv) en la carpeta especificada.
-Devuelve siempre una lista limpia de valores (List[str]).
-"""
 import os
-from typing import List, Dict, Tuple, Optional
-
+from typing import Dict, List, Optional, Tuple
 import pandas as pd
 
 from ..errors import ValidationError
@@ -98,7 +88,7 @@ class CargaCatalogos:
 
         # Extraer valores de la primera columna
         values = df.iloc[:, 0].dropna().astype(str).str.strip().tolist()
-        # Eliminar duplicados y mantener orden de aparición
+        # Eliminar duplicados manteniendo el orden
         unique_vals = list(dict.fromkeys(values))
 
         self._cache[key] = unique_vals
