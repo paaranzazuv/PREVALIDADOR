@@ -361,12 +361,16 @@ def group_sum_equal_validator(_, __, ___, rule: Rule, **kwargs) -> List[Validati
     for group_val, grupo_df in grouped:
         suma = grupo_df[rule.columna].dropna().sum()
         if suma != target:
+            # Mensaje personalizado por grupo
+            mensaje = rule.mensaje or f"La suma de '{rule.columna}' agrupada por '{group_col}' debe ser igual a {target}"
+            mensaje = mensaje.replace(f"'{group_col}'", f"{group_val}")
             errores.append(ValidationError(
                 sheet=rule.sheet,
                 row=None,
                 col=rule.columna,
-                message=rule.mensaje or f"Grupo '{group_val}': suma de {rule.columna} es {suma} pero se esperaba {target}"
+                message=mensaje
             ))
+
     return errores
 
 
