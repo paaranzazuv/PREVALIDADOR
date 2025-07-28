@@ -345,7 +345,7 @@
             "mayor_a": 0,
             "mensaje_error": "NumeroPisos es obligatorio y debe ser un número mayor a 0."
         },
-        "AñoConstruccion": {
+        "EdadConstruccion": {
             "requerido": true,
             "tipo": "numero",
             "mayor_a": 1850,
@@ -860,7 +860,7 @@
                         "Puntos",	
                         "AreaConstruida",	
                         "NumeroPisos",	
-                        "AñoConstruccion",	
+                        "'EdadConstruccion",	
                         "PorcentajeConstruccion",	
                         "Tipificacion",	
                         "TotalCocinas",	
@@ -939,7 +939,7 @@
             "mayor_a": 0,
             "mensaje_error": "NumeroPisos es obligatorio y debe ser un número mayor a 0."
         },
-        "AñoConstruccion": {
+        "EdadConstruccion": {
             "requerido": true,
             "tipo": "numero",
             "mayor_a": 1850,
