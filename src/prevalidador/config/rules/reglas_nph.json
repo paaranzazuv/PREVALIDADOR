@@ -649,7 +649,7 @@
     "Puntos",
     "AreaConstruida",
     "NumeroPisos",
-    "EdadConstruccion",
+    "AñoConstruccion",
     "PorcentajeConstruido",
     "Tipificacion",
     "TotalCocinas",
@@ -762,7 +762,7 @@
     "mensaje_error": "El campo NumeroPisos es obligatorio y debe ser un número mayor a 0"
   },
 
-  "EdadConstruccion": {
+  "AñoConstruccion": {
     "requerido": true,
     "tipo": "numero",
     "mensaje_error": "El campo EdadConstruccion es obligatorio y debe ser un año válido"
