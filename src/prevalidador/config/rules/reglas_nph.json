@@ -646,7 +646,7 @@
     "IdUso",
     "ConvencionalNoConvencional",
     "calificacionNoConvencional",
-    "Puntos",
+    "Puntos ",
     "AreaConstruida",
     "NumeroPisos",
     "AñoConstruccion",
@@ -742,7 +742,7 @@
   }
 ],
 
-  "Puntos": {
+  "Puntos ": {
     "requerido": true,
     "tipo": "numero",
     "mayor_igual": 0,
