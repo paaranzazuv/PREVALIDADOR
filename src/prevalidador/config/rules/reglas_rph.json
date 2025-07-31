@@ -1363,7 +1363,7 @@
     "__max_filas":0
     },
 
-    "DatosVisita":{
+"DatosVisita":{
     "_estructura": [
     "Npn",	  
     "TipoNovedadNpn",
@@ -1383,9 +1383,11 @@
     "Direccion",
     "Autoriza_Notificaciones",
     "Npn_Anterior"
-  ]
-},
-        "__max_filas":0
+  ],
+  "__max_filas":0
+
+}
+        
     }
 
     
