@@ -1362,21 +1362,33 @@
     ],
     "__max_filas":0
     },
+
     "DatosVisita":{
-        "_estructura":[
-            "PrimerNombre",
-            "SegundoNombre",
-            "PrimerApellido",
-            "SegundoApellido",
-            "Celular",
-            "Direccion",
-            "Autoriza_Notificaciones",
-            "Npn_Anterior"
-        ],
+    "_estructura": [
+    "Npn",	  
+    "TipoNovedadNpn",
+    "NovedadFMI",
+    "Observaciones",
+    "FechaVisitaPredial",
+    "ResultadoVisita",
+    "Comodato",
+    "BeneficioComunidadesIndig",
+    "TipoDocumentoVisita",
+    "Documento",
+    "PrimerNombre",
+    "SegundoNombre",
+    "PrimerApellido",
+    "SegundoApellido",
+    "Celular",
+    "Direccion",
+    "Autoriza_Notificaciones",
+    "Npn_Anterior"
+  ]
+},
         "__max_filas":0
     }
 
-    }
+    
 
 
 
