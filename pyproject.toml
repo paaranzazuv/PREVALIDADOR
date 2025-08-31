@@ -4,33 +4,27 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "prevalidador"
-version = "0.1.1"  # Nueva versión parcheada
+version = "0.1.1"
 description = "Sistema de prevalidación de cargas masivas en Excel basado en reglas JSON y catálogos externos"
-authors = [
-  { name = "Manuel Aranzazu", email = "tu_email@dominio.com" }
-]
+authors = [{ name = "Manuel Aranzazu", email = "tu_email@dominio.com" }]
 license = { text = "MIT" }
 readme = "README.md"
 requires-python = ">=3.9"
-
-# Fijamos Pandas >=2.0 para evitar iteritems() obsoleto y openpyxl >=3.1 para mayor estabilidad
-dependencies = [
-  "pandas>=2.0",
-  "openpyxl>=3.1"
-]
+dependencies = ["pandas>=2.0", "openpyxl>=3.1"]
 
 [project.urls]
 Homepage = "https://github.com/tu_usuario/prevalidador"
 Repository = "https://github.com/tu_usuario/prevalidador"
 
-# Script ejecutable desde consola
 [project.scripts]
 prevalidar = "prevalidador.main:main"
 
 [tool.setuptools]
-packages = { find = { where = ["src"] } }
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.setuptools.package-data]
-"prevalidador" = ["config/**/*.json", "config/**/*.xlsx", "config/**/*.csv"]
+prevalidador = ["config/**/*.json", "config/**/*.xlsx", "config/**/*.csv"]
 
-# 🔴 Eliminamos la antigua sección de entry-points porque ya usamos [project.scripts]

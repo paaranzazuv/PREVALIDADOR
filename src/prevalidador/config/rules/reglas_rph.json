@@ -2,51 +2,49 @@
     "Ficha":{
         "_estructura":["NroFicha",
         	"ObjectId",
-        	"NumCedCatastral",
-        	"Municipio",
-        	"Sector",
-        	"Corregimiento",
-        	"Barrio",
-        	"ManzanVereda",
-        	"Predio",
-        	"DireccionReferencia",
-        	"DireccionNombre",
-        	"DireccionReal",
-        	"CaracteristicaPredio",
-        	"AreaTotalLote",
-        	"AreaLoteComun",
-        	"TotalEdificios",
-        	"UnidadesEnRPH",
-        	"ApartamentosOCasas",
-        	"Locales",
-        	"GarajesCubiertos",
-        	"GarajesDescubiertos",
-        	"CuartosUtiles",
-        	"MatriculaMatriz",
-        	"PredioLcTipo",
-        	"Npn",
-        	"Tipo_Direccion",
-        	"Es_Direccion_Principal",
-        	"Codigo_Postal",
-        	"Clase_Via_Principal",
-        	"Valor_Via_Principal",
-        	"Letra_Via_Principal",
-        	"Letra_Via_Generadora",
-        	"Sector_Ciudad",
-        	"Valor_Via_Generadora",
-        	"Numero_Predio",
-        	"Sector_Predio",
-        	"Complemento"
+            "NumCedCatastral",
+            "Municipio",
+            "Sector",
+            "Corregimiento",
+            "Barrio",
+            "ManzanVereda",
+            "Predio",
+            "DireccionReferencia",
+            "DireccionNombre",
+            "DireccionReal",	
+            "CaracteristicaPredio",	
+            "AreaTotalLote",	
+            "AreaLoteComun",	
+            "TotalEdificios",	
+            "UnidadesEnRPH",	
+            "ApartamentosOCasas",
+            "Locales",
+            "GarajesCubiertos",
+            "GarajesDescubiertos",
+            "CuartosUtiles",
+            "MatriculaMatriz",
+            "PredioLcTipo",
+            "Npn",
+            "Tipo_Direccion",
+            "Es_Direccion_Principal",
+            "Codigo_Postal",
+            "Clase_Via_Principal",
+            "Valor_Via_Principal",
+            "Letra_Via_Principal",
+            "Letra_Via_Generadora",
+            "Sector_Ciudad",
+            "Valor_Via_Generadora",
+            "Numero_Predio",
+            "Sector_Predio"	,
+            "Complemento"
+
             ],
 
 
         "__max_filas": 1,
 
 
-        "NroFicha": 
-         
-
-            {
+        "NroFicha": {
         "requerido": true,
         "tipo": "numero",
         "mayor_a": 0,
@@ -155,8 +153,28 @@
         "requerido": true,
         "igual_a":"Si",
         "mensaje_error":"Es_Direccion_Principal debe ser 'Si'."
-            }
-               
+            },
+
+        "Codigo_Postal":{
+        "requerido": true,
+        "igual_a":"054040",
+        "mensaje_error":"Codigo_postal debe ser igual a 054040"
+        },
+
+        "Clase_Via_Principal":{
+        "requerido": true,
+        "catalogo":"catalog_rph.xlsx:Clase_Via_Principal",
+        "mensaje_error": "Clase_Via_Principal es obligatoria y debe ser un valor válido del catálogo."
+        },
+
+        "Valor_Via_Principal":{
+        "requerido": true,
+        "regex": "^[0-9]+$",
+        "mensaje_error": "Valor_Via_Principal es obligatoria y debe tener numeros"
+        }
+              
+                   
+  
         
     },
     "ZonasHomogeneas": {
@@ -167,9 +185,9 @@
             "IdentificadorZona", 
             "Área", 
             "TipoZona"
-        ],
+        ]
 
-        "__max_filas": 0
+        
 
     },
 
@@ -241,7 +259,6 @@
         }
 
     
-
     },
 
     "Construcciones": {
@@ -282,12 +299,21 @@
             "mensaje_error": "NroFicha debe ser un número entero positivo de hasta 10 dígitos."
         }
         ],
-        "secuencia": {
-            "requerido": true,
-            "tipo": "numero",
-            "mayor_a": 0,
-            "mensaje_error": "Secuencia debe ser un número entero positivo."
+
+        "secuencia": [
+        { "requerido": true,
+            "mensaje_error": "Secuencia es obligatoria."
         },
+        { "regex": "^[1-9]\\d*$",
+            "mensaje_error": "Secuencia debe ser un número entero positivo (sin decimales ni ceros a la izquierda)."
+        },
+        { "mayor_a": 0,
+            "mensaje_error": "Secuencia debe ser mayor que 0."
+        },
+        { "unico": true,
+            "mensaje_error": "Secuencia debe ser única."
+        }
+        ],
         "NumeroConstruccion": {
             "requerido": true,
             "tipo": "numero",
@@ -299,12 +325,37 @@
             "catalogo": "catalog_rph.xlsx:TipoConstruccion",
             "mensaje_error": "TipoConstruccion es obligatorio y debe ser un valor válido del catálogo."
         },
-        "IdUso": {
-            "requerido": true,
-            "catalogo": "catalog_rph.xlsx:IdUso",
-            "mensaje_error": "IdUso es obligatorio y debe ser un valor válido del catálogo."
-        },
-        "ConvencionalNoConvencional": {
+"IdUso": [
+  {
+    "condiciones": [{ "columna": "TipoConstruccion", "igual_a": "R" }],
+    "regex": "^[^|]*\\|(Residencial|Anexo)(?:$|\\.)",
+    "mensaje_error": "Si TipoConstruccion es 'R', IdUso debe tener 'Residencial' o 'Anexo' después del '|'."
+  },
+  {
+    "condiciones": [{ "columna": "TipoConstruccion", "igual_a": "C" }],
+    "regex": "^[^|]*\\|(Comercial|Anexo)(?:$|\\.)",
+    "mensaje_error": "Si TipoConstruccion es 'C', IdUso debe tener 'Comercial' o 'Anexo' después del '|'."
+  },
+  {
+    "condiciones": [{ "columna": "TipoConstruccion", "igual_a": "I" }],
+    "regex": "^[^|]*\\|(Industrial|Anexo)(?:$|\\.)",
+    "mensaje_error": "Si TipoConstruccion es 'I', IdUso debe tener 'Industrial' o 'Anexo' después del '|'."
+  },
+  {
+    "condiciones": [{ "columna": "TipoConstruccion", "igual_a": "T" }],
+    "regex": "^[^|]*\\|(Institucional|Anexo)(?:$|\\.)",
+    "mensaje_error": "Si TipoConstruccion es 'T', IdUso debe tener 'Institucional' o 'Anexo' después del '|'."
+  },
+
+  { "requerido": true,
+    "mensaje_error": "El campo IdUso es obligatorio."
+  },
+  { "catalogo": "catalog_nph.xlsx:IdUso",
+    "mensaje_error": "IdUso debe estar en el catálogo."
+  }
+],
+
+"ConvencionalNoConvencional": {
             "requerido": true,
             "catalogo": "catalog_rph.xlsx:ConvencionalNoConvencional",
             "mensaje_error": "ConvencionalNoConvencional es obligatorio y debe ser un valor válido del catálogo."
@@ -468,13 +519,13 @@
             "referencia_columna": "NroFicha",
             "mensaje_error": "El valor de NroFicha en la hoja Fichas debe existir en la hoja Colindantes"
         },
-        "Orientacion": 
-    {
+        "Orientacion": {
             "agrupado_por": "NroFicha",
             "valores_requeridos": ["SUR", "ESTE", "NORTE", "OESTE"],
-            "mensaje_error": "Cada NroFicha debe tener al menos las orientaciones SUR, ESTE, NORTE y OESTE."
-    }
-    ,
+            "requerido": true,
+            "mensaje_error": "En 'NroFicha' falta(n) orientación(es): {faltantes}"
+            },
+    
         "Colindante": {
             "requerido": true,
             "vacia": false,
@@ -628,13 +679,13 @@
       {
         "requerido": true,
          "mensaje_error": "El campo NroFicha es obligatorio"},
-        {"unico": true,
+        { "unico": true,
          "mensaje_error": "El campo NroFicha debe ser único"},
-         {
-        "referencia_hoja": "Propietarios",
-        "referencia_columna": "NroFicha",
-        "mensaje_error": "El valor de NroFicha en la hoja Fichas debe existir en la hoja Propietarios"
-      }
+        
+        {   "referencia_hoja": "FichasPrediales",
+            "referencia_columna": "NroFicha",
+            "mensaje_error": "El valor de NroFicha en la hoja Propietaros debe de exsisitir en la hoja FichasPrediales"
+        }
       ],
 
       "edificio": [
@@ -651,6 +702,17 @@
         }
       
       ],
+
+      "NumCedulaCatastral": 
+            {
+                "requerido": true,
+                "vacia": false,
+                "longitud_max": 28,
+                "regex": "^[0-9]+$",
+                "mensaje_error": "NumCedulaCatastral es obligatorio y debe ser un número."
+            },
+
+
         "UnidadPredial": 
             {
                 "requerido": true,
@@ -663,66 +725,136 @@
             {
                 "igual_a":"NUE|Nuevo",
                 "mensaje_error": "ModeloRegistral debe ser 'NUE|Nuevo'."
-            }
-        ,
-        "Libro": 
-            {
-                "requerido": true,
-                "tipo": "numero",
-                "igual_a": 0,
-                "mensaje_error": "Libro debe ser 0."
-            }
-        ,
-        "Tomo": 
-            {
-                "requerido": true,
-                "tipo": "numero",
-                "igual_a": 0,
-                "mensaje_error": "Tomo debe ser 0."
-            }
-        ,
-        "Pagina": 
-            {
-                "requerido": true,
-                "tipo": "numero",
-                "igual_a": 0,
-                "mensaje_error": "Pagina debe ser 0."
-            }
+            },
+    "Libro": [
+  {
+    "condiciones": [
+      { "columna": "MatriculaInmobiliaria", "vacia": true }
+    ],
+    "igual_a": 0,
+    "mensaje_error": "Si MatriculaInmobiliaria está vacía, Libro debe quedar vacío"
+  },
+  {
+    "condiciones": [
+      { "columna": "MatriculaInmobiliaria", "vacia": false }
+    ],
+    "tipo": "numero",
+    "mayor_o_igual_a": 0,
+    "requerido": true,
+    "mensaje_error": "Si MatriculaInmobiliaria NO está vacía, Libro debe ser ≥ 0 y no puede quedar vacío"
+  }
+],
+
+ 
+    "Tomo": [
+  {
+    "condiciones": [
+      { "columna": "MatriculaInmobiliaria", "vacia": true }
+    ],
+    "igual_a": 0,
+    "mensaje_error": "Si MatriculaInmobiliaria está vacía, Tomo debe ser 0"
+  },
+  {
+    "condiciones": [
+      { "columna": "MatriculaInmobiliaria", "vacia": false }
+    ],
+    "tipo": "numero",
+    "mayor_igual_a": 0,
+    "requerido": true,
+    "mensaje_error": "Si MatriculaInmobiliaria NO está vacía, Tomo debe ser ≥ 0 y no puede quedar vacío"
+  }
+],    
+
+    "Pagina": [
+  {
+    "condiciones": [
+      { "columna": "MatriculaInmobiliaria", "vacia": true }
+    ],
+    "igual_a": 0,
+    "mensaje_error": "Si MatriculaInmobiliaria está vacía, Página debe ser 0"
+  },
+  {
+    "condiciones": [
+      { "columna": "MatriculaInmobiliaria", "vacia": false }
+    ],
+    "tipo": "numero",
+    "mayor_igual_a": 0,
+    "requerido": true,
+    "mensaje_error": "Si MatriculaInmobiliaria NO está vacía, Página debe ser ≥ 0 y no puede quedar vacío"
+  }
+],
+    
+    "circulo": [
+  {
+    "condiciones": [ { "columna": "MatriculaInmobiliaria", "vacia": true } ],
+    "vacia": true,
+    "mensaje_error": "Si MatriculaInmobiliaria está vacía, circulo debe quedar vacío"
+  }]
+
         ,
 
         "MatriculaInmobiliaria": [
-            {
-                "requerido": true,
-                "mensaje_error": "MatriculaInmobiliaria es obligatorio y no puede estar vacío."
-            },
-            {
-                "unico": true,
-                 "mensaje_error": "MatriculaInmobiliaria debe ser un número único"
-            },
+ 
+  {
+    "condiciones": [ { "columna": "Npn", "regex": "^.{21}2" } ],
+    "vacia": true,
+    "mensaje_error": "Si en la posición 22 de Npn está '2', MatriculaInmobiliaria debe quedar vacía"
+  },
+
+  
+  
+  {
+    "condiciones": [
+      { "columna": "Npn", "regex": "^.{21}[34]" },
+      { "columna": "MatriculaInmobiliaria", "vacia": false }
+    ],
+    "menor_o_igual_a": 260000,
+    "mensaje_error": "Si en la posición 22 de Npn es '3' o '4', MatriculaInmobiliaria debe ser ≤ 260000"
+  },
+  {
+    "condiciones": [
+      { "columna": "Npn", "regex": "^.{21}[34]" },
+      { "columna": "MatriculaInmobiliaria", "vacia": false }
+    ],
+    "longitud_max": 6,
+    "mensaje_error": "Si en la posición 22 de Npn es '3' o '4', MatriculaInmobiliaria debe tener máximo 6 caracteres"
+  },
+  {
+    "condiciones": [
+      { "columna": "Npn", "regex": "^.{21}[34]" },
+      { "columna": "MatriculaInmobiliaria", "vacia": false }
+    ],
+    "unico": true,
+    "mensaje_error": "Si en la posición 22 de Npn es '3' o '4', MatriculaInmobiliaria no debe repetirse"
+  },
+
+  
+  {
+    "condiciones": [ { "columna": "Npn", "no_regex": "^.{21}[234]" } ],
+    "requerido": true,
+    "mensaje_error": "Si en la posición 22 de Npn no es '2', '3' ni '4', MatriculaInmobiliaria es obligatoria"
+  },
+  
+  {
+    "condiciones": [ { "columna": "Npn", "no_regex": "^.{21}[234]" } ],
+    "menor_o_igual_a": 260000,
+    "mensaje_error": "Si en la posición 22 de Npn no es '2', '3' ni '4', MatriculaInmobiliaria debe ser ≤ 260000"
+  },
+  {
+    "condiciones": [ { "columna": "Npn", "no_regex": "^.{21}[234]" } ],
+    "longitud_max": 6,
+    "mensaje_error": "Si en la posición 22 de Npn no es '2', '3' ni '4', MatriculaInmobiliaria debe tener máximo 6 caracteres"
+  },
+  {
+    "condiciones": [ { "columna": "Npn", "no_regex": "^.{21}[234]" } ],
+    "unico": true,
+    "mensaje_error": "Si en la posición 22 de Npn no es '2', '3' ni '4', MatriculaInmobiliaria no debe repetirse"
+  }
+]
+,
 
 
-
-           {
-               "menor_o_igual_a": 260000,
-               "mensaje_error": "Si en la posición 22 de Npn no está '2', MatriculaInmobiliaria debe ser un número menor o igual a 260000"
-           },
-           {
-               "longitud_max": 6,
-               "mensaje_error": "Si en la posición 22 de Npn no está '2', MatriculaInmobiliaria debe ser un número único,  con una longitud máxima de 6 caracteres"
-           }
-       ],
-
-        "circulo": [
-            {"tipo":"texto",
-            "mensaje_error": "El campo círculo debe ser un texto"},
-            
-            {"igual_a": "020",
-            "mensaje_error": "El campo círculo debe ser '020'"},
-            {"longitud_igual_a": 3,
-            "mensaje_error": "El campo círculo debe tener una longitud de 3 caracteres"},
-            {"requerido": true,
-            "mensaje_error":" El campo círculo es obligatorio"}
-            ],
+        
             "CaracteristicaPredio": 
             {
                 "requerido": true,
@@ -755,18 +887,22 @@
                 "catalogo": "catalog_rph.xlsx:DestinoEconomico",
                 "mensaje_error": "DestinoEconomico es obligatorio y debe ser un valor válido del catálogo."
             },
-             "CoeficienteCopropiedad":
-            [{
-                "requerido": true,
-                "tipo": "numero",
-                "mayor_a": 0,
-                "mensaje_error": "CoeficienteCopropiedad es obligatorio y debe ser un número mayor a 0."
-            },
-            {
-                "suma_igual_a": 100,
-                "mensaje_error": "La suma de todos los valores en CoeficienteCopropiedad debe ser exactamente 100."
-            }
-        ],
+             "CoeficienteCopropiedad": [
+  {
+    "requerido": true,
+    "tipo": "numero",
+    "mayor_a": 0,
+    "mensaje_error": "CoeficienteCopropiedad es obligatorio y debe ser un número mayor a 0."
+  },
+  {
+    "suma_igual_a": 100,
+    "porcentaje": false,
+    "decimales": 8,
+    "tolerancia": 0.00001,
+    "marcar_en": "last",
+    "mensaje_error": "La suma de todos los valores en CoeficienteCopropiedad debe ser 100."
+  }
+],
 
         "AreaLotePrivada":[
             {
@@ -840,9 +976,21 @@
                 "requerido": true,
                 "igual_a": "Si",
                 "mensaje_error": "Es_Direccion_Principal debe ser 'Si'."
-            }
+            },
         
+        "Clase_Via_Principal":{
+        "requerido": true,
+        "catalogo":"catalog_rph.xlsx:Clase_Via_Principal",
+        "mensaje_error": "Clase_Via_Principal es obligatoria y debe ser un valor válido del catálogo."
+        },
 
+        "Valor_Via_Principal":{
+        "requerido": true,
+        "regex": "^[0-9]+$",
+        "mensaje_error": "Valor_Via_Principal es obligatoria y debe tener numeros"
+        }
+             
+           
 
 
 
@@ -875,18 +1023,32 @@
             "referencia_columna": "NroFicha",
             "mensaje_error": "El valor de NroFicha en la hoja FichasPrediales debe existir en la hoja ConstruccionesFicha"
         },
-        "Secuencia": {
-            "requerido": true,
-            "tipo": "numero",
-            "mayor_a": 0,
-            "mensaje_error": "Secuencia debe ser un número entero positivo."
+        "Secuencia": [
+        { "requerido": true,
+            "mensaje_error": "Secuencia es obligatoria."
         },
-        "NumeroConstruccion": {
+        { "regex": "^[1-9]\\d*$",
+            "mensaje_error": "Secuencia debe ser un número entero positivo (sin decimales ni ceros a la izquierda)."
+        },
+        { "mayor_a": 0,
+            "mensaje_error": "Secuencia debe ser mayor que 0."
+        },
+        { "unico": true,
+            "mensaje_error": "Secuencia debe ser única."
+        }
+        ],
+        "NumeroConstruccion": [{
             "requerido": true,
             "tipo": "numero",
             "mayor_a": 0,
             "mensaje_error": "NumeroConstruccion debe ser un número entero positivo."
         },
+        {
+        "agrupado_por": "NroFicha",
+        "unico": true,
+        "mensaje_error": "El valor de 'NumeroConstruccion' debe ser único dentro de 'NroFicha'."
+        }
+    ],
         "TipoConstruccion":
             {
                 "requerido": true,
@@ -1042,9 +1204,11 @@
         },
         "Orientacion": {
             "agrupado_por": "NroFicha",
-            "valores_requeridos": ["SUR", "ESTE", "NORTE", "OESTE", "NADIR", "CENIT"],
-            "mensaje_error": "Cada NroFicha debe tener al menos las orientaciones SUR, ESTE, NORTE y OESTE."
-        },
+            "valores_requeridos": ["SUR", "ESTE", "NORTE", "OESTE", "NADIR", "ZENIT"],
+            "requerido": true,
+            "mensaje_error": "En 'NroFicha' falta(n) orientación(es): {faltantes}"
+            },
+
         "Colindante": {
             "requerido": true,
             "vacia": false,
@@ -1087,14 +1251,19 @@
             "Nombre_Pueblo",
             "Nombre_Comunidad"
         ],
-        "NroFicha": 
+       
+       
+        "NroFicha":[
+        {   "referencia_hoja": "FichasPrediales",
+            "referencia_columna": "NroFicha",
+            "mensaje_error": "El valor de NroFicha en la hoja Propietaros debe de exsisitir en la hoja FichasPrediales"
+        },
       {
-        "referencia_hoja": "Fichas",
-        "referencia_columna": "NroFicha",
-        "mensaje_error": "El valor de NroFicha en la hoja Propietarios debe existir en la hoja Fichas",
-        "requerido": true
-      }
+        "requerido": true,
+        "mensaje_error": "El campo NroFicha es obligatorio"
+      }]
     ,
+    
     "TipoDocumento":{
       "validator": "catalog",
      "requerido": true,
@@ -1115,13 +1284,15 @@
         "longitud_igual_a": 9,
         "mensaje_error": "Si TipoDocumento es 'NIT', el Documento debe tener exactamente 9 caracteres"
       },
-      {
-        "condiciones": [
-          { "columna": "TipoDocumento", "diferente_a": "7|PASAPORTE" }
-        ],
-        "regex": "^[0-9]+$",
-        "mensaje_error": "Si TipoDocumento no es 'Pasaporte', el Documento debe contener solo dígitos"
-      }
+       {
+      "condiciones": [
+        { "columna": "TipoDocumento", "diferente_a": "7|PASAPORTE" },
+        { "columna": "TipoDocumento", "diferente_a": "8|SECUENCIAL" }
+      ],
+      "regex": "^(?!\\s*$)[0-9-]+$",
+      "mensaje_error": "Si TipoDocumento no es 'Pasaporte' ni 'Secuencial', el Documento debe contener solo dígitos o '-'"
+    }
+
 
      
       
@@ -1327,12 +1498,11 @@
 
   "Sexo": [
     {
-      "condiciones": [
-        { "columna": "TipoDocumento", "igual_a": "3|NIT" }
-      ],
-      "igual_a": "X|SIN DETERMINAR",
-      "mensaje_error": "El campo Sexo debe estar X|SIN DETERMINAR cuando TipoDocumento sea '3|NIT'"
-    },
+       
+    "condiciones": [{ "columna": "TipoDocumento", "igual_a": "3|NIT" }],
+    "in": ["X|SIN DETERMINAR"],
+    "mensaje_error": "El campo Sexo debe estar X|SIN DETERMINAR cuando TipoDocumento sea '3|NIT'"
+  },
     {
       "requerido": true,
       "catalogo": "catalog_rph.xlsx:Genero",

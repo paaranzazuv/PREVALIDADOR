@@ -17,7 +17,6 @@
       "DireccionNombre",
       "DestinoEconomico",
       "AreaTotalTerreno",
-      "AreaTotalConstruida",
       "ModoAdquisicion",
       "Litigio",
       "PorcentajeLitigio",
@@ -36,105 +35,29 @@
       "Sector_Predio",
       "Complemento"
     ],
-    "MatriculaInmobiliaria":[
-           
+
+    "NroFicha": [
+    
       {
-        "condiciones": [
-       {
-         "columna": "Npn",
-         "posicion": 22,
-         "igual_a": "2"
-       }
-     ],
-     "vacia": true,
-     "mensaje_error": "Si en la posición 22 de Npn está '2', MatriculaInmobiliaria debe quedar vacía"
-   },
-   {
-      "requerido": true,
-     "mensaje_error": "Si en la posición 22 de Npn no está '2', MatriculaInmobiliaria es obligatorio"},
-    {
-        "unico": true,
-        "mensaje_error": "Si en la posición 22 de Npn no está '2', MatriculaInmobiliaria debe ser un número único"
-   },
-    {
-      "menor_o_igual_a": 260000,
-      "mensaje_error": "Si en la posición 22 de Npn no está '2', MatriculaInmobiliaria debe ser un número menor o igual a 260000"
-
-   }, 
-    {
-      "longitud_max": 6,
-      "mensaje_error": "Si en la posición 22 de Npn no está '2', MatriculaInmobiliaria debe ser un número único,  con una longitud máxima de 6 caracteres"
-   }
-],
-
-    "Libro": [
-  {
-    "condiciones": [
-      { "columna": "MatriculaInmobiliaria", "vacia": true }
-    ],
-    "vacia": true,
-    "mensaje_error": "Si MatriculaInmobiliaria está vacía, Libro debe quedar vacío"
-  },
-  {
-    "condiciones": [
-      { "columna": "MatriculaInmobiliaria", "vacia": false }
-    ],
-    "tipo": "numero",
-    "mayor_o_igual_a": 0,
-    "requerido": true,
-    "mensaje_error": "Si MatriculaInmobiliaria NO está vacía, Libro debe ser ≥ 0 y no puede quedar vacío"
-  }
-],
-
- 
-    "Tomo": [
-  {
-    "condiciones": [
-      { "columna": "MatriculaInmobiliaria", "vacia": true }
-    ],
-    "vacia": true,
-    "mensaje_error": "Si MatriculaInmobiliaria está vacía, Tomo debe quedar vacío"
-  },
-  {
-    "condiciones": [
-      { "columna": "MatriculaInmobiliaria", "vacia": false }
-    ],
-    "tipo": "numero",
-    "mayor_igual_a": 0,
-    "requerido": true,
-    "mensaje_error": "Si MatriculaInmobiliaria NO está vacía, Tomo debe ser ≥ 0 y no puede quedar vacío"
-  }
-],    
-
-    "Pagina": [
-  {
-    "condiciones": [
-      { "columna": "MatriculaInmobiliaria", "vacia": true }
-    ],
-    "vacia": true,
-    "mensaje_error": "Si MatriculaInmobiliaria está vacía, Página debe quedar vacía"
-  },
-  {
-    "condiciones": [
-      { "columna": "MatriculaInmobiliaria", "vacia": false }
-    ],
-    "tipo": "numero",
-    "mayor_igual_a": 0,
-    "requerido": true,
-    "mensaje_error": "Si MatriculaInmobiliaria NO está vacía, Página debe ser ≥ 0 y no puede quedar vacío"
-  }
-],
-    
-    "circulo": [
-      {"tipo":"texto",
-      "mensaje_error": "El campo círculo debe ser un texto"},
-    
-      {"igual_a": "020",
-      "mensaje_error": "El campo círculo debe ser '020'"},
-      {"longitud_igual_a": 3,
-      "mensaje_error": "El campo círculo debe tener una longitud de 3 caracteres"},
-      {"requerido": true,
-      "mensaje_error":" El campo círculo es obligatorio"}
+        "tipo": "numero",
+        "mensaje_error": "El campo NroFicha debe ser un número"
+      },
+      {
+        "mayor_a": 0,
+        "mensaje_error": "El campo NroFicha debe ser mayor a 0"
+      },
+      {
+        "requerido": true,
+         "mensaje_error": "El campo NroFicha es obligatorio"},
+      {"unico": true,
+         "mensaje_error": "El campo NroFicha debe ser único"},
+        
+             
+      {
+        "referencia_hoja": "Propietarios",
+        "referencia_columna": "NroFicha",
+        "mensaje_error": "El valor de NroFicha en la hoja Fichas debe existir en la hoja Propietarios"
+      }
     ],
 
 
@@ -171,6 +94,153 @@
 
     ],
 
+
+    "MatriculaInmobiliaria": [
+ 
+  {
+    "condiciones": [ { "columna": "Npn", "regex": "^.{21}2" } ],
+    "vacia": true,
+    "mensaje_error": "Si en la posición 22 de Npn está '2', MatriculaInmobiliaria debe quedar vacía"
+  },
+
+  
+  
+  {
+    "condiciones": [
+      { "columna": "Npn", "regex": "^.{21}[34]" },
+      { "columna": "MatriculaInmobiliaria", "vacia": false }
+    ],
+    "menor_o_igual_a": 260000,
+    "mensaje_error": "Si en la posición 22 de Npn es '3' o '4', MatriculaInmobiliaria debe ser ≤ 260000"
+  },
+  {
+    "condiciones": [
+      { "columna": "Npn", "regex": "^.{21}[34]" },
+      { "columna": "MatriculaInmobiliaria", "vacia": false }
+    ],
+    "longitud_max": 6,
+    "mensaje_error": "Si en la posición 22 de Npn es '3' o '4', MatriculaInmobiliaria debe tener máximo 6 caracteres"
+  },
+  {
+    "condiciones": [
+      { "columna": "Npn", "regex": "^.{21}[34]" },
+      { "columna": "MatriculaInmobiliaria", "vacia": false }
+    ],
+    "unico": true,
+    "mensaje_error": "Si en la posición 22 de Npn es '3' o '4', MatriculaInmobiliaria no debe repetirse"
+  },
+
+  
+  {
+    "condiciones": [ { "columna": "Npn", "no_regex": "^.{21}[234]" } ],
+    "requerido": true,
+    "mensaje_error": "Si en la posición 22 de Npn no es '2', '3' ni '4', MatriculaInmobiliaria es obligatoria"
+  },
+  
+  {
+    "condiciones": [ { "columna": "Npn", "no_regex": "^.{21}[234]" } ],
+    "menor_o_igual_a": 260000,
+    "mensaje_error": "Si en la posición 22 de Npn no es '2', '3' ni '4', MatriculaInmobiliaria debe ser ≤ 260000"
+  },
+  {
+    "condiciones": [ { "columna": "Npn", "no_regex": "^.{21}[234]" } ],
+    "longitud_max": 6,
+    "mensaje_error": "Si en la posición 22 de Npn no es '2', '3' ni '4', MatriculaInmobiliaria debe tener máximo 6 caracteres"
+  },
+  {
+    "condiciones": [ { "columna": "Npn", "no_regex": "^.{21}[234]" } ],
+    "unico": true,
+    "mensaje_error": "Si en la posición 22 de Npn no es '2', '3' ni '4', MatriculaInmobiliaria no debe repetirse"
+  }
+]
+,
+
+
+    "Libro": [
+  {
+    "condiciones": [
+      { "columna": "MatriculaInmobiliaria", "vacia": true }
+    ],
+    "igual_a": 0,
+    "mensaje_error": "Si MatriculaInmobiliaria está vacía, Libro debe quedar vacío"
+  },
+  {
+    "condiciones": [
+      { "columna": "MatriculaInmobiliaria", "vacia": false }
+    ],
+    "tipo": "numero",
+    "mayor_o_igual_a": 0,
+    "requerido": true,
+    "mensaje_error": "Si MatriculaInmobiliaria NO está vacía, Libro debe ser ≥ 0 y no puede quedar vacío"
+  }
+],
+
+ 
+    "Tomo": [
+  {
+    "condiciones": [
+      { "columna": "MatriculaInmobiliaria", "vacia": true }
+    ],
+    "igual_a": 0,
+    "mensaje_error": "Si MatriculaInmobiliaria está vacía, Tomo debe ser 0"
+  },
+  {
+    "condiciones": [
+      { "columna": "MatriculaInmobiliaria", "vacia": false }
+    ],
+    "tipo": "numero",
+    "mayor_igual_a": 0,
+    "requerido": true,
+    "mensaje_error": "Si MatriculaInmobiliaria NO está vacía, Tomo debe ser ≥ 0 y no puede quedar vacío"
+  }
+],    
+
+    "Pagina": [
+  {
+    "condiciones": [
+      { "columna": "MatriculaInmobiliaria", "vacia": true }
+    ],
+    "igual_a": 0,
+    "mensaje_error": "Si MatriculaInmobiliaria está vacía, Página debe ser 0"
+  },
+  {
+    "condiciones": [
+      { "columna": "MatriculaInmobiliaria", "vacia": false }
+    ],
+    "tipo": "numero",
+    "mayor_igual_a": 0,
+    "requerido": true,
+    "mensaje_error": "Si MatriculaInmobiliaria NO está vacía, Página debe ser ≥ 0 y no puede quedar vacío"
+  }
+],
+    
+    "circulo": [
+  {
+    "condiciones": [ { "columna": "MatriculaInmobiliaria", "vacia": true } ],
+    "vacia": true,
+    "mensaje_error": "Si MatriculaInmobiliaria está vacía, circulo debe quedar vacío"
+  },
+
+  {
+    "condiciones": [ { "columna": "MatriculaInmobiliaria", "vacia": false } ],
+    "requerido": true,
+    "mensaje_error": "El campo circulo es obligatorio cuando MatriculaInmobiliaria no está vacía"
+  },
+  {
+    "condiciones": [ { "columna": "MatriculaInmobiliaria", "vacia": false } ],
+    "in": ["020"],
+    "mensaje_error": "El campo circulo debe ser '020'"
+  },
+  {
+    "condiciones": [ { "columna": "MatriculaInmobiliaria", "vacia": false } ],
+    "longitud_igual_a": 3,
+    "mensaje_error": "El campo circulo debe tener una longitud de 3 caracteres"
+  }
+],
+
+
+    
+
     
    "DestinoEconomico": {
       "catalogo": "catalog_nph.xlsx:DestinoEconomico",
@@ -199,12 +269,7 @@
       "requerido": true,
       "mensaje_error":" El AreaTotalTerreno debe de ser mayor a 0"
     },
-    "AreaTotalConstruida": {
-      "tipo": "numero",
-      "menor_a": 1000,
-      "requerido": true,
-      "aviso": " area de terreno mayor a 1000 verificar"
-    },
+   
 
     "ModoAdquisicion": [
       {
@@ -230,9 +295,10 @@
     ],
 
     "DireccionNombre": {
-      "vacia": true,
-      "mensaje_error": "La dirección en DirecciónNombre debe estar vacía"
-      
+      "vacia": false,
+      "diferente_a": "null",
+      "mensaje_error": "La dirección en DireccionNombre no debe estar vacía",
+      "requerido": true
     },
     "DireccionReal": {
       "vacia": false,
@@ -250,19 +316,12 @@
     },
       {
         "condiciones": [
-          { "columna": "PredioLcTipo", "contiene": "Privado" }
+          { "columna": "DestinoEconomico", "no_contiene": "34|Uso_Publico" }
         ],
-        "no_contiene": "Publico",
+        "no_contiene": "Uso_Publico",
         "mensaje_error": "Un predio privado no puede tener destino económico público"
-      },
-      {
-        "condiciones": [
-          { "columna": "PredioLcTipo", "contiene": "Publico" }
-        ],
-        "no_contiene": "Privado",
-        "mensaje_error": "Un predio público no puede tener destino económico privado"
-        
       }
+      
     ],
 
     "Npn": {
@@ -288,30 +347,7 @@
       "mensaje_error": "Es_Direccion_Principal es obligatorio y tiene que ser 'Si'"
     },
     
-    "NroFicha": [
     
-      {
-        "tipo": "numero",
-        "mensaje_error": "El campo NroFicha debe ser un número"
-      },
-      {
-        "mayor_a": 0,
-        "mensaje_error": "El campo NroFicha debe ser mayor a 0"
-      },
-      {
-        "requerido": true,
-         "mensaje_error": "El campo NroFicha es obligatorio"},
-        {"unico": true,
-         "mensaje_error": "El campo NroFicha debe ser único"},
-        
-        
-      
-      {
-        "referencia_hoja": "Propietarios",
-        "referencia_columna": "NroFicha",
-        "mensaje_error": "El valor de NroFicha en la hoja Fichas debe existir en la hoja Propietarios"
-      }
-    ],
 
     "Litigio": {
       "requerido": true,
@@ -328,8 +364,29 @@
         "requerido": true,
         "tipo": "numero",
         "mensaje_error": "PorcentajeLitigio debe ser un número"
-      }]
+      }],
+
+      "Codigo_Postal":{
+        "requerido": true,
+        "igual_a":"054040",
+        "mensaje_error":"Codigo_postal debe ser igual a 054040"
+        },
+
+        "Clase_Via_Principal":{
+        "requerido": true,
+        "catalogo":"catalog_nph.xlsx:Clase_Via_Principal",
+        "mensaje_error": "Clase_Via_Principal es obligatoria y debe ser un valor válido del catálogo."
+        },
+
+        "Valor_Via_Principal":{
+        "requerido": true,
+        "regex": "^[0-9]+$",
+        "mensaje_error": "Valor_Via_Principal es obligatoria y debe tener numeros"
+        }
+          
     },
+
+    
 
   "Propietarios": {
     "_estructura": [
@@ -396,12 +453,13 @@
         "mensaje_error": "Si TipoDocumento es 'NIT', el Documento debe tener exactamente 9 caracteres"
       },
       {
-        "condiciones": [
-          { "columna": "TipoDocumento", "diferente_a": "7|PASAPORTE" }
-        ],
-        "regex": "^[0-9]+$",
-        "mensaje_error": "Si TipoDocumento no es 'Pasaporte', el Documento debe contener solo dígitos"
-      }
+      "condiciones": [
+        { "columna": "TipoDocumento", "diferente_a": "7|PASAPORTE" },
+        { "columna": "TipoDocumento", "diferente_a": "8|SECUENCIAL" }
+      ],
+      "regex": "^(?!\\s*$)[0-9-]+$",
+      "mensaje_error": "Si TipoDocumento no es 'Pasaporte' ni 'Secuencial', el Documento debe contener solo dígitos o '-'"
+    }
 
      
       
@@ -674,12 +732,21 @@
 ],
 
 
-  "secuencia": {
-    "requerido": true,
-    "tipo": "numero",
-    "mayor_a": 0,
-    "mensaje_error": "El campo secuencia es obligatorio y debe ser un número mayor a 0"
-  },  
+  "secuencia": [
+        { "requerido": true,
+            "mensaje_error": "Secuencia es obligatoria."
+        },
+        { "regex": "^[1-9]\\d*$",
+            "mensaje_error": "Secuencia debe ser un número entero positivo (sin decimales ni ceros a la izquierda)."
+        },
+        { "mayor_a": 0,
+            "mensaje_error": "Secuencia debe ser mayor que 0."
+        },
+        { "unico": true,
+            "mensaje_error": "Secuencia debe ser única."
+        }
+        ],
+ 
 
   "NumeroConstruccion": {
     "requerido": true,
@@ -704,11 +771,35 @@
   }
   ],
 
-  "IdUso": {
-    "requerido": true,
-    "catalogo": "catalog_nph.xlsx:IdUso",
-    "mensaje_error": "El campo IdUso es obligatorio y debe estar en el catálogo"
+ "IdUso": [
+  {
+    "condiciones": [{ "columna": "TipoConstruccion", "igual_a": "R" }],
+    "regex": "^[^|]*\\|(Residencial|Anexo)(?:$|\\.)",
+    "mensaje_error": "Si TipoConstruccion es 'R', IdUso debe tener 'Residencial' o 'Anexo' después del '|'."
   },
+  {
+    "condiciones": [{ "columna": "TipoConstruccion", "igual_a": "C" }],
+    "regex": "^[^|]*\\|(Comercial|Anexo)(?:$|\\.)",
+    "mensaje_error": "Si TipoConstruccion es 'C', IdUso debe tener 'Comercial' o 'Anexo' después del '|'."
+  },
+  {
+    "condiciones": [{ "columna": "TipoConstruccion", "igual_a": "I" }],
+    "regex": "^[^|]*\\|(Industrial|Anexo)(?:$|\\.)",
+    "mensaje_error": "Si TipoConstruccion es 'I', IdUso debe tener 'Industrial' o 'Anexo' después del '|'."
+  },
+  {
+    "condiciones": [{ "columna": "TipoConstruccion", "igual_a": "T" }],
+    "regex": "^[^|]*\\|(Institucional|Anexo)(?:$|\\.)",
+    "mensaje_error": "Si TipoConstruccion es 'T', IdUso debe tener 'Institucional' o 'Anexo' después del '|'."
+  },
+
+  { "requerido": true,
+    "mensaje_error": "El campo IdUso es obligatorio."
+  },
+  { "catalogo": "catalog_nph.xlsx:IdUso",
+    "mensaje_error": "IdUso debe estar en el catálogo."
+  }
+],
 
 
   
@@ -742,10 +833,9 @@
   }
 ],
 
-  "Puntos ": {
+  "Puntos": {
     "requerido": true,
-    "tipo": "numero",
-    "mayor_igual": 0,
+    "regex": "^[1-9]\\d*$",
     "mensaje_error": "El campo Puntos es obligatorio y debe ser un número mayor a 0"
   },
 
