@@ -1,4 +1,4 @@
-python -m src.prevalidador.main ^
+py -m src.prevalidador.main ^
   data/inbox ^
   src/prevalidador/config/rules ^
   src/prevalidador/config/catalogs ^

@@ -38,6 +38,9 @@ def infer_validator_and_params(raw_rule: dict) -> Tuple[str, dict]:
         archivo, hoja = raw_rule["catalogo"].split(":", 1)
         return "catalog", {"archivo": archivo, "hoja": hoja}
     
+    # en infer_validator_and_params(...)
+    if raw_rule.get("tipo") == "numero" or raw_rule.get("type_number") is True:
+        return "type_number", {}
 
         # ————————— Validación de referencia a otra hoja —————————
     if raw_rule.get("referencia_hoja") and raw_rule.get("referencia_columna"):
@@ -76,9 +79,14 @@ def infer_validator_and_params(raw_rule: dict) -> Tuple[str, dict]:
         return "date_format", {"formato": fmt}
 
     # Igual exacto (alias a regex)
+    # Igual exacto (alias a regex)
+    # Igual exacto (alias a regex literal)
     if "igual_a" in raw_rule:
-        pattern = f"^{raw_rule['igual_a']}$"
+        import re
+        pattern = "^" + re.escape(str(raw_rule["igual_a"])) + "$"
         return "regex", {"regex": pattern}
+
+
 
     # In / not_in list
     if "in" in raw_rule:
@@ -148,6 +156,8 @@ def load_rules(path_rules: str) -> List[Rule]:
     Ignora claves especiales (_estructura, __max_filas, __min_filas)
     y reglas realmente globales que se procesan en validar_globales_por_hoja.
     """
+    import json  # por si no está importado arriba
+
     with open(path_rules, encoding="utf-8") as f:
         raw = json.load(f)
 
@@ -177,30 +187,94 @@ def load_rules(path_rules: str) -> List[Rule]:
                 if not isinstance(rr, dict):
                     raise ValueError(f"[ERROR] En hoja {sheet}, columna {col} la regla no es un dict válido: {rr}")
 
-                # ⛔ Ignorar reglas globales: agrupado_por + valores_requeridos
-                if "agrupado_por" in rr and "valores_requeridos" in rr:
-                    continue
-
-                # ⛔ Ignorar suma_igual_a global (no agrupada)
-                if "suma_igual_a" in rr and "agrupado_por" not in rr:
-                    continue
-
-                # ✅ Regla de suma agrupada
-                if "agrupado_por" in rr and "suma_igual_a" in rr:
-                    val_name, params = infer_validator_and_params(rr)
+                # ✅ Suma global (no agrupada) => column_sum_equal
+                if "suma_igual_a" in rr and "agrupado_por" not in rr and "group_by" not in rr:
                     mensaje = rr.get("mensaje_error", f"Error {sheet}.{col}")
                     rules.append(
                         Rule(
                             sheet=sheet,
                             columna=col,
-                            validator=val_name,
-                            params=params,
+                            validator="column_sum_equal",
+                            params={"target": rr.get("suma_igual_a")},
+                            mensaje=mensaje,
+                            conditions=parse_conditions(rr.get("condiciones", [])),
+                            valor=None,
+                        )
+                    )
+                    continue
+
+
+                # ✅ Regla de suma agrupada => group_sum_equal
+                if ("agrupado_por" in rr or "group_by" in rr) and ("suma_igual_a" in rr or "target" in rr):
+                    group_by = rr.get("group_by") or rr.get("agrupado_por")
+                    target = rr.get("target", rr.get("suma_igual_a"))
+                    mensaje = rr.get("mensaje_error", f"Error {sheet}.{col}")
+
+                    rules.append(
+                        Rule(
+                            sheet=sheet,
+                            columna=col,
+                            validator="group_sum_equal",
+                            params={
+                                "group_by": group_by,
+                                "target": target
+                            },
                             mensaje=mensaje,
                             conditions=parse_conditions(rr.get("condiciones", [])),
                             valor=None
                         )
                     )
                     continue
+
+                # ✅ Regla de valores requeridos por grupo => group_contains_values
+                if ("agrupado_por" in rr or "group_by" in rr) and ("valores_requeridos" in rr or "required_values" in rr):
+                    group_by = rr.get("group_by") or rr.get("agrupado_por")
+                    required_values = rr.get("required_values") or rr.get("valores_requeridos")
+                    # Flags opcionales (default: requerido=True, normalizar_acentos=False)
+                    requerido = rr.get("requerido", rr.get("required", True))
+                    normalizar_acentos = rr.get("normalizar_acentos", rr.get("normalize_accents", False))
+                    mensaje = rr.get("mensaje_error") or rr.get("message") or f"Error {sheet}.{col}"
+
+                    rules.append(
+                        Rule(
+                            sheet=sheet,
+                            columna=col,
+                            validator="group_contains_values",
+                            params={
+                                "group_by": group_by,
+                                "required_values": required_values,
+                                "required": requerido,
+                                "normalize_accents": normalizar_acentos
+                            },
+                            mensaje=mensaje,
+                            conditions=parse_conditions(rr.get("condiciones", [])),
+                            valor=None
+                        )
+                    )
+                    continue
+
+                # ✅ Unicidad por grupo => group_unique
+                if ("agrupado_por" in rr or "group_by" in rr) and rr.get("unico"):
+                    group_by = rr.get("group_by") or rr.get("agrupado_por")
+                    mensaje = rr.get("mensaje_error", f"Error {sheet}.{col}")
+                    rules.append(
+                        Rule(
+                            sheet=sheet,
+                            columna=col,
+                            validator="group_unique",
+                            params={
+                                "group_by": group_by,
+                                "case_sensitive": rr.get("case_sensitive", False),
+                                "as_integer": rr.get("as_integer", False),
+                                "ignore_empty": rr.get("ignore_empty", True),
+                            },
+                            mensaje=mensaje,
+                            conditions=parse_conditions(rr.get("condiciones", [])),
+                            valor=None
+                        )
+                    )
+                    continue
+
 
                 # ✅ Reglas fila a fila estándar
                 val_name, params = infer_validator_and_params(rr)
@@ -260,10 +334,13 @@ def ejecutar_validaciones(
                 mask = df.apply(lambda row: all(_match_condition(row, c) for c in rule.conditions), axis=1)
                 subset = df[mask]
 
-            if rule.validator in ("unique", "group_sum_equal", "ref_sheet"):
-                # Validadores que operan a nivel DataFrame completo
+            if rule.validator in ("unique", "group_sum_equal", "ref_sheet",
+                      "column_sum_equal", "group_contains_values",
+                      "group_unique"):
                 errs = validator(None, None, None, rule, loaders=loader, dfs=dfs, df=df)
             else:
+   
+
                 errs = []
                 for idx, row in subset.iterrows():
                     val = row.get(rule.columna)
@@ -297,8 +374,16 @@ def _match_condition(row: pd.Series, condition: Condition) -> bool:
         return str(val) == str(target)
     if op in ("distinto_a", "diferente_a"):
         return str(val) != str(target)
+    # en rules_engine._match_condition
+    import re
+    
+    if op == "regex":
+        return re.search(str(target), str(val or "")) is not None
+    if op in ("no_regex", "not_regex"):
+        return re.search(str(target), str(val or "")) is None
 
-    # Vacia
+
+   # Vacia
     if op == "vacia":
         empty = isna(val) or str(val).strip() == ""
         return empty == bool(target)
