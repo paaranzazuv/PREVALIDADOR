@@ -77,6 +77,10 @@ def infer_validator_and_params(raw_rule: dict) -> Tuple[str, dict]:
             params = {"formato": fmt, **rango}
             return "date_range", params
         return "date_format", {"formato": fmt}
+        # Igual estricto (nuevo validador)
+    if "igual_exacto" in raw_rule:
+        return "igual_exacto", {"valor": raw_rule["igual_exacto"]}
+
 
     # Igual exacto (alias a regex)
     # Igual exacto (alias a regex)
@@ -368,22 +372,22 @@ def _match_condition(row: pd.Series, condition: Condition) -> bool:
     val = row.get(condition.columna)
     op, target = condition.operador, condition.valor
     from pandas import isna
+    import re
 
     # Igual y distinto
     if op == "igual_a":
         return str(val) == str(target)
     if op in ("distinto_a", "diferente_a"):
         return str(val) != str(target)
-    # en rules_engine._match_condition
-    import re
     
+
+    # Regex
     if op == "regex":
         return re.search(str(target), str(val or "")) is not None
     if op in ("no_regex", "not_regex"):
         return re.search(str(target), str(val or "")) is None
 
-
-   # Vacia
+    # Vacia
     if op == "vacia":
         empty = isna(val) or str(val).strip() == ""
         return empty == bool(target)
@@ -396,9 +400,9 @@ def _match_condition(row: pd.Series, condition: Condition) -> bool:
 
     # Contains
     if op == "contiene":
-        return str(target) in str(val or '')
+        return str(target) in str(val or "")
     if op == "no_contiene":
-        return str(target) not in str(val or '')
+        return str(target) not in str(val or "")
 
     # Referencias
     if op == "igual_a_columna":
@@ -406,13 +410,14 @@ def _match_condition(row: pd.Series, condition: Condition) -> bool:
     if op == "mayor_a_columna":
         try:
             return float(val) > float(row.get(target))
-        except:
+        except Exception:
             return False
+
 
     # Numérico general
     try:
         v, t = float(val), float(target)
-    except:
+    except Exception:
         return False
     if op == "mayor_a":
         return v > t
@@ -420,9 +425,11 @@ def _match_condition(row: pd.Series, condition: Condition) -> bool:
         return v >= t
     if op == "menor_a":
         return v < t
-    if op == "menor_o_igual_a":
+    if op in ("menor_o_igual_a", "menor_igual_a"):
         return v <= t
+
     return False
+
 def validar_globales_por_hoja(sheet_name, df, reglas_json):
     """
     Valida reglas globales a nivel hoja:
