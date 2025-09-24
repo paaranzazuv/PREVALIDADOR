@@ -143,12 +143,23 @@
         "mensaje_error":"PredioLcTipo debe ser 'Predio.Privado.Privado'."
             }
             ,
-        "Tipo_Direccion": {
-        "requerido": true,
+         "Tipo_Direccion": [
+      {
+        "condiciones": [
+          { "columna": "Npn", "regex": "^.{7}00" }
+        ],
         "igual_a": "Estructurada",
-        "mensaje_error": "Tipo_Direccion debe ser 'Estructurada'."
-            }
-            ,
+        "mensaje_error": "Si en las posiciones 8–9 de Npn está '00', Tipo_Direccion debe ser 'Estructurada'."
+      },
+      {
+        "condiciones": [
+          { "columna": "Npn", "no_regex": "^.{7}00" }
+        ],
+        "igual_a": "No Estructurada",
+        "mensaje_error": "Si en las posiciones 8–9 de Npn NO está '00', Tipo_Direccion debe ser 'No Estructurada'."
+      }
+      ],
+
         "Es_Direccion_Principal": {
         "requerido": true,
         "igual_a":"Si",
@@ -161,22 +172,48 @@
         "mensaje_error":"Codigo_postal debe ser igual a 054040"
         },
 
-        "Clase_Via_Principal":{
-        "requerido": true,
-        "catalogo":"catalog_rph.xlsx:Clase_Via_Principal",
-        "mensaje_error": "Clase_Via_Principal es obligatoria y debe ser un valor válido del catálogo."
+        "Clase_Via_Principal": [
+        {
+          "condiciones": [
+            { "columna": "Tipo_Direccion", "igual_a": "Estructurada" }
+          ],
+          "requerido": true,
+          "catalogo": "catalog_rph.xlsx:Clase_Via_Principal",
+          "mensaje_error": "Si Tipo_Direccion es 'Estructurada', Clase_Via_Principal es obligatoria y debe estar en el catálogo."
         },
+        {
+          "condiciones": [
+            { "columna": "Tipo_Direccion", "igual_a": "No Estructurada" }
+          ],
+          "catalogo": "catalog_rph.xlsx:Clase_Via_Principal",
+          "mensaje_error": "Si Tipo_Direccion es 'No Estructurada', Clase_Via_Principal no es obligatoria, pero si existe debe estar en el catálogo."
+        }
+      ],
 
-        "Valor_Via_Principal":{
+
+        "Valor_Via_Principal":[
+        {
+          "condiciones": [
+            { "columna": "Tipo_Direccion", "igual_a": "Estructurada" }
+          ],
         "requerido": true,
         "regex": "^[0-9]+$",
         "mensaje_error": "Valor_Via_Principal es obligatoria y debe tener numeros"
+        },
+        {
+          "condiciones": [
+            { "columna": "Tipo_Direccion", "igual_a": "No Estructurada" }
+          ],
+          "regex": "^[0-9]+$",
+          "mensaje_error": "Si existe, Valor_Via_Principal debe tener numeros"
         }
+      ]
               
                    
   
         
     },
+
     "ZonasHomogeneas": {
         "_estructura": [
             "NroFicha",
@@ -887,22 +924,22 @@
                 "catalogo": "catalog_rph.xlsx:DestinoEconomico",
                 "mensaje_error": "DestinoEconomico es obligatorio y debe ser un valor válido del catálogo."
             },
-             "CoeficienteCopropiedad": [
-  {
-    "requerido": true,
-    "tipo": "numero",
-    "mayor_a": 0,
-    "mensaje_error": "CoeficienteCopropiedad es obligatorio y debe ser un número mayor a 0."
-  },
-  {
-    "suma_igual_a": 100,
-    "porcentaje": false,
-    "decimales": 8,
-    "tolerancia": 0.00001,
-    "marcar_en": "last",
-    "mensaje_error": "La suma de todos los valores en CoeficienteCopropiedad debe ser 100."
-  }
-],
+             
+          "CoeficienteCopropiedad": [
+          {
+            "requerido": true,
+            "tipo": "numero",
+            "mayor_a": 0,
+            "mensaje_error": "CoeficienteCopropiedad es obligatorio y debe ser un número mayor a 0."
+          },
+          {
+            "suma_igual_a": 100,
+            "decimales": 8,
+            "tolerancia": 0.00001,
+            "mensaje_error": "La suma de toda la columna 'CoeficienteCopropiedad' debe ser 100"
+          }
+        ],
+
 
         "AreaLotePrivada":[
             {
@@ -933,8 +970,8 @@
         ],
         "ModoAdquisicion": {
             "requerido": true,
-            "igual_a": "1|DOMINIO",
-            "mensaje_error": "ModoAdquisicion debe ser '1|DOMINIO'."
+            "igual_a": "1|Dominio",
+            "mensaje_error": "ModoAdquisicion debe ser '1|Dominio'."
         },
         "Litigio": {
             "requerido": true,
@@ -966,11 +1003,23 @@
             "unico": true,
             "mensaje_error": "El campo Npn debe tener una longitud de 30 caracteres y ser único"
         },
-        "Tipo_Direccion": {
-            "requerido": true,
-            "igual_a": "Estructurada",
-            "mensaje_error": "Tipo_Direccion debe ser 'Estructurada'."
-        },
+        "Tipo_Direccion": [
+      {
+        "condiciones": [
+          { "columna": "Npn", "regex": "^.{7}00" }
+        ],
+        "igual_a": "Estructurada",
+        "mensaje_error": "Si en las posiciones 8–9 de Npn está '00', Tipo_Direccion debe ser 'Estructurada'."
+      },
+      {
+        "condiciones": [
+          { "columna": "Npn", "no_regex": "^.{7}00" }
+        ],
+        "igual_a": "No Estructurada",
+        "mensaje_error": "Si en las posiciones 8–9 de Npn NO está '00', Tipo_Direccion debe ser 'No Estructurada'."
+      }
+    ],
+
         "Es_Direccion_Principal":
             {
                 "requerido": true,
@@ -978,18 +1027,42 @@
                 "mensaje_error": "Es_Direccion_Principal debe ser 'Si'."
             },
         
-        "Clase_Via_Principal":{
-        "requerido": true,
-        "catalogo":"catalog_rph.xlsx:Clase_Via_Principal",
-        "mensaje_error": "Clase_Via_Principal es obligatoria y debe ser un valor válido del catálogo."
+        "Clase_Via_Principal": [
+        {
+          "condiciones": [
+            { "columna": "Tipo_Direccion", "igual_a": "Estructurada" }
+          ],
+          "requerido": true,
+          "catalogo": "catalog_rph.xlsx:Clase_Via_Principal",
+          "mensaje_error": "Si Tipo_Direccion es 'Estructurada', Clase_Via_Principal es obligatoria y debe estar en el catálogo."
         },
+        {
+          "condiciones": [
+            { "columna": "Tipo_Direccion", "igual_a": "No Estructurada" }
+          ],
+          "catalogo": "catalog_rph.xlsx:Clase_Via_Principal",
+          "mensaje_error": "Si Tipo_Direccion es 'No Estructurada', Clase_Via_Principal no es obligatoria, pero si existe debe estar en el catálogo."
+        }
+      ],
 
-        "Valor_Via_Principal":{
+
+        "Valor_Via_Principal":[
+        {
+          "condiciones": [
+            { "columna": "Tipo_Direccion", "igual_a": "Estructurada" }
+          ],
         "requerido": true,
         "regex": "^[0-9]+$",
         "mensaje_error": "Valor_Via_Principal es obligatoria y debe tener numeros"
+        },
+        {
+          "condiciones": [
+            { "columna": "Tipo_Direccion", "igual_a": "No Estructurada" }
+          ],
+          "regex": "^[0-9]+$",
+          "mensaje_error": "Si existe, Valor_Via_Principal debe tener numeros"
         }
-             
+      ]  
            
 
 
@@ -1290,7 +1363,7 @@
         { "columna": "TipoDocumento", "diferente_a": "8|SECUENCIAL" }
       ],
       "regex": "^(?!\\s*$)[0-9-]+$",
-      "mensaje_error": "Si TipoDocumento no es 'Pasaporte' ni 'Secuencial', el Documento debe contener solo dígitos o '-'"
+      "mensaje_error": "Si TipoDocumento no es 'Pasaporte' ni 'Secuencial', el Documento debe contener solo dígitos o '-' Advertencia no puede tener espacios ni l inicio de al final"
     }
 
 

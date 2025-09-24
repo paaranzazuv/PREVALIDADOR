@@ -333,12 +333,25 @@
       "mensaje_error":"El campo Npn debe tener una longitud de 30 caracteres y ser único"
     },
 
-    "Tipo_Direccion": {
-      "requerido": true,
-      "igual_a": "Estructurada", 
-      "mensaje_error":"Tipo_Direccion debe de ser Estructurada" 
+"Tipo_Direccion": [
+  {
+    "condiciones": [
+      { "columna": "Npn", "regex": "^.{7}00" }
+    ],
+    "igual_a": "Estructurada",
+    "mensaje_error": "Si en las posiciones 8–9 de Npn está '00', Tipo_Direccion debe ser 'Estructurada'."
+  },
+  {
+    "condiciones": [
+      { "columna": "Npn", "no_regex": "^.{7}00" }
+    ],
+    "igual_a": "No Estructurada",
+    "mensaje_error": "Si en las posiciones 8–9 de Npn NO está '00', Tipo_Direccion debe ser 'No Estructurada'."
+  }
+],
 
-    },
+
+
 
 
     "Es_Direccion_Principal": {
@@ -372,17 +385,42 @@
         "mensaje_error":"Codigo_postal debe ser igual a 054040"
         },
 
-        "Clase_Via_Principal":{
-        "requerido": true,
-        "catalogo":"catalog_nph.xlsx:Clase_Via_Principal",
-        "mensaje_error": "Clase_Via_Principal es obligatoria y debe ser un valor válido del catálogo."
+       "Clase_Via_Principal": [
+        {
+          "condiciones": [
+            { "columna": "Tipo_Direccion", "igual_a": "Estructurada" }
+          ],
+          "requerido": true,
+          "catalogo": "catalog_rph.xlsx:Clase_Via_Principal",
+          "mensaje_error": "Si Tipo_Direccion es 'Estructurada', Clase_Via_Principal es obligatoria y debe estar en el catálogo."
         },
+        {
+          "condiciones": [
+            { "columna": "Tipo_Direccion", "igual_a": "No Estructurada" }
+          ],
+          "catalogo": "catalog_rph.xlsx:Clase_Via_Principal",
+          "mensaje_error": "Si Tipo_Direccion es 'No Estructurada', Clase_Via_Principal no es obligatoria, pero si existe debe estar en el catálogo."
+        }
+      ],
 
-        "Valor_Via_Principal":{
+
+        "Valor_Via_Principal":[
+        {
+          "condiciones": [
+            { "columna": "Tipo_Direccion", "igual_a": "Estructurada" }
+          ],
         "requerido": true,
         "regex": "^[0-9]+$",
         "mensaje_error": "Valor_Via_Principal es obligatoria y debe tener numeros"
+        },
+        {
+          "condiciones": [
+            { "columna": "Tipo_Direccion", "igual_a": "No Estructurada" }
+          ],
+          "regex": "^[0-9]+$",
+          "mensaje_error": "Si existe, Valor_Via_Principal debe tener numeros"
         }
+      ]
           
     },
 
@@ -458,7 +496,7 @@
         { "columna": "TipoDocumento", "diferente_a": "8|SECUENCIAL" }
       ],
       "regex": "^(?!\\s*$)[0-9-]+$",
-      "mensaje_error": "Si TipoDocumento no es 'Pasaporte' ni 'Secuencial', el Documento debe contener solo dígitos o '-'"
+      "mensaje_error": "Si TipoDocumento no es 'Pasaporte' ni 'Secuencial', el Documento debe contener solo dígitos o '-' y no puede tener espacios ni al inicio ni al final"
     }
 
      
@@ -704,7 +742,7 @@
     "IdUso",
     "ConvencionalNoConvencional",
     "calificacionNoConvencional",
-    "Puntos ",
+    "Puntos",
     "AreaConstruida",
     "NumeroPisos",
     "AñoConstruccion",

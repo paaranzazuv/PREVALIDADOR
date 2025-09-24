@@ -106,12 +106,18 @@ def main():
         for err in errores:
             errores_por_hoja.setdefault(err.sheet, []).append(err)
 
-        # Leer todas las hojas originales del archivo Excel
+        # Leer todas las hojas originales y limpiar filas completamente vacías
         try:
             xls = pd.read_excel(str(input_file), sheet_name=None, dtype=str)
+
+            # Limpiar cada hoja: eliminar filas en blanco totales
+            for hoja, df in xls.items():
+                xls[hoja] = df.dropna(how="all").reset_index(drop=True)
+
         except Exception as e:
             logging.error(f"Error al leer '{input_file.name}': {e}")
             continue
+
 
         # 3️⃣ Guardar archivo validado en subcarpeta según tipo detectado
         output_subdir = resultados_dir / tipo

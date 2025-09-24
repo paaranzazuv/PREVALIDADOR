@@ -597,6 +597,37 @@ def group_unique_validator(_value, _row, _idx, rule: Rule, **kwargs) -> List[Val
     return errores
 
 
+@register("column_sum_equal")
+def column_sum_equal_validator(_value, _row, _idx, rule: Rule, **kwargs):
+    import pandas as pd
+    df = kwargs.get("df")
+    if df is None or rule.columna not in df.columns:
+        return []
+
+    p = rule.params or {}
+    decimales  = int(p.get("decimales", 6))
+    tol        = float(p.get("tolerancia", 1e-6))
+    target     = float(p.get("target", p.get("suma_igual_a", 0)))
+
+    # 🔑 Conversión robusta (maneja ".", ",", notación científica)
+    serie = (
+        df[rule.columna]
+        .astype(str)
+        .str.strip()
+        .str.replace(",", ".", regex=False)
+    )
+    serie = pd.to_numeric(serie, errors="coerce").fillna(0.0).round(decimales)
+
+    total = round(serie.sum(min_count=1), decimales)
+
+    if pd.isna(total) or abs(total - target) > tol:
+        msg = rule.mensaje or f"La suma de '{rule.columna}' debe ser {target} ±{tol}"
+        # ⬇ Reporte global → aparece en hoja Resumen
+        return [ValidationError(rule.sheet, None, rule.columna, msg)]
+    return []
+
+    
+
 
 
 # Alias
